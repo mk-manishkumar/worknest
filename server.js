@@ -1,0 +1,54 @@
+import "dotenv/config";
+import express from "express";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import passport from "passport";
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+// connect dB
+import connectDB from "./config/db.js";
+connectDB();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cookieParser());
+
+// Configure session middleware
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: parseInt(process.env.SESSION_MAX_AGE, 10) },
+  })
+);
+
+// Initialize Passport and session management
+configurePassport(passport); // Passport strategy and serialization
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Serve static files from the 'public' folder
+app.use(express.static(path.join(__dirname, "public")));
+
+// Handle 404 errors (not found)
+app.use((req, res, next) => {
+  res.status(404).render("404", { message: "Page not found" });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).render("error", { message: "Something went wrong!" });
+});
+
+app.listen(port, () => console.log(`Server running on port ${port}`));
