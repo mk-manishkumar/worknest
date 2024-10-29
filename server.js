@@ -4,7 +4,8 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
 import session from "express-session";
-import passport from "passport";
+
+import passport from "./config/passport.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
