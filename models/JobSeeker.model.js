@@ -17,6 +17,9 @@ const jobSeekerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    portfolioLink: {
+      type: String,
+    },
     appliedJobs: [
       {
         type: Schema.Types.ObjectId,
