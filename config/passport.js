@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import User from "../models/User.js";
+import User from "../models/User.model.js";
 import { comparePassword } from "../utils/passwordBcrypt.js"; 
 
 // Configure the local strategy
