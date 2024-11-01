@@ -1,52 +1,31 @@
 import "dotenv/config";
 import express from "express";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
-import cookieParser from "cookie-parser";
-import session from "express-session";
 import cors from "cors";
 import morgan from "morgan";
+import "express-async-errors";
 
+// db config import
+import connectDB from "./config/db.js";
+
+// routes import
+import authRoutes from "./routes/auth.routes.js";
+
+import errorMiddleware from "./middlewares/errorMiddleware.js";
 
 const app = express();
 const port = process.env.PORT || 8080;
 
 // connect dB
-import connectDB from "./config/db.js";
 connectDB();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors())
-app.use(morgan("dev"))
-app.use(cookieParser());
+app.use(cors());
+app.use(morgan("dev"));
 
-// Configure session middleware
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: parseInt(process.env.SESSION_MAX_AGE, 10) },
-  })
-);
+// routes
+app.use("/api/v1/auth", authRoutes);
 
-
-// Serve static files from the 'public' folder
-app.use(express.static(path.join(__dirname, "public")));
-
-// Handle 404 errors (not found)
-app.use((req, res, next) => {
-  res.status(404).render("404", { message: "Page not found" });
-});
-
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).render("error", { message: "Something went wrong!" });
-});
+// validation middleware
+app.use(errorMiddleware);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
