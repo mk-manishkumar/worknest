@@ -7,7 +7,6 @@ import session from "express-session";
 import cors from "cors";
 import morgan from "morgan";
 
-import passport from "./config/passport.js";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -19,8 +18,6 @@ connectDB();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors())
@@ -37,10 +34,6 @@ app.use(
   })
 );
 
-// Initialize Passport and session management
-configurePassport(passport); // Passport strategy and serialization
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Serve static files from the 'public' folder
 app.use(express.static(path.join(__dirname, "public")));
