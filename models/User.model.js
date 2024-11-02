@@ -30,9 +30,16 @@ const userSchema = new mongoose.Schema(
 
 // middlewares
 userSchema.pre("save", async function () {
+  if (!this.isModified) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
+
+// compare password
+userSchema.methods.comparePassword = async function (userPassword) {
+  const isMatch = await bcrypt.compare(userPassword, this.password);
+  return isMatch;
+};
 
 // JWT
 userSchema.methods.createJWT = function () {
