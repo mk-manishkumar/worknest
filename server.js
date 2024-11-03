@@ -10,6 +10,7 @@ import connectDB from "./config/db.js";
 // routes import
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import jobsRoutes from "./routes/jobs.routes.js";
 
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 
@@ -26,6 +27,7 @@ app.use(morgan("dev"));
 // routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/job", jobsRoutes);
 
 // validation middleware
 app.use(errorMiddleware);
