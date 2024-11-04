@@ -2,6 +2,9 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import helmet from "helmet";
+import xss from "xss-clean";
+import ExpressMongoSanitize from "express-mongo-sanitize";
 import "express-async-errors";
 
 // db config import
@@ -20,6 +23,9 @@ const port = process.env.PORT || 8080;
 // connect dB
 connectDB();
 
+app.use(helmet());
+app.use(xss());
+app.use(ExpressMongoSanitize());
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
