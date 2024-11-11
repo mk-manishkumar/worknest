@@ -1,5 +1,6 @@
 {
   "name": "client",
+  "proxy": "http://localhost:3004",
   "private": true,
   "version": "0.0.0",
   "type": "module",
