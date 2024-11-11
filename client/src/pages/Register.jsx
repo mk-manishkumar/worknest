@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import InputForm from "../Components/Shared/InputForm";
+import { useDispatch } from "react-redux";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // hooks
+  const dispatch = useDispatch();
+
   // form function
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
-      console.log(name, email, password);
+      dispatch()
     } catch (error) {
       console.log(error);
     }
