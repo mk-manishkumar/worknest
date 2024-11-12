@@ -1,22 +1,43 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputForm from "../Components/Shared/InputForm";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { showLoading } from "../redux/features/alertSlice";
+import axios from "axios";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  //redux state
+  const { loading } = useSelector((state) => state.alerts);
+
   // hooks
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // form function
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch()
+      if (!name || !email || !password) {
+        return toast.error("Please Provide All Fields");
+      }
+      dispatch(showLoading());
+      const { data } = await axios.post("/api/v1/auth/register", {
+        name,
+        email,
+        password,
+      });
+      dispatch(hideLoading());
+      if (data.success) {
+        toast.success("Register Successfully");
+        navigate("/login");
+      }
     } catch (error) {
+      dispatch(hideLoading());
+      toast.error("Invalid Form Details, Please Try Again!");
       console.log(error);
     }
   };
