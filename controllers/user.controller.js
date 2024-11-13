@@ -19,3 +19,30 @@ export const updateUserController = async (req, res, next) => {
     token,
   });
 };
+
+// GET USER DATA
+export const getUserController = async (req, res) => {
+  try {
+    const user = await UserModel.findById({ _id: req.body.user.userId });
+    user.password = undefined;
+
+    if (!user) {
+      return res.status(200).send({
+        message: "User Not Found",
+        success: false,
+      });
+    } else {
+      res.status(200).send({
+        success: true,
+        data: user,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Auth Error",
+      success: false,
+      error: error.message,
+    });
+  }
+};
