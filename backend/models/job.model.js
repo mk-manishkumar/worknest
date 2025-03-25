@@ -11,7 +11,7 @@ const jobSchema = new mongoose.Schema(
       required: "Description is required",
     },
     requirements: {
-      type: String,
+      type: [String],
       required: "Requirements is required",
     },
     location: {
@@ -22,12 +22,16 @@ const jobSchema = new mongoose.Schema(
       type: Number,
       required: "Salary is required",
     },
+    experienceLevel: {
+      type: Number,
+      required: "Experience is required",
+    },
     jobType: {
       type: String,
       enum: ["Full-time", "Part-time", "Contract", "Internship"],
       required: "Job type is required",
     },
-    position: {
+    jobOpenings: {
       type: Number,
       required: "Position is required",
     },

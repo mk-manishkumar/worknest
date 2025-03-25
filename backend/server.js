@@ -4,15 +4,20 @@ import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config({});
 
-// db connection
+// ==================== DATABASE CONNECTION ====================
 import connectDB from "./utils/db.js";
 connectDB();
+
+// ==================== IMPORT ROUTES ====================
+import userRoutes from "./routes/user.routes.js";
+import companyRoutes from "./routes/company.routes.js";
+import jobRoutes from "./routes/job.routes.js";
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// middlewares
+// ==================== MIDDLEWARES ====================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -21,6 +26,11 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
+
+// ==================== APIs ====================
+app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/company", companyRoutes);
+app.use("/api/v1/job", jobRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

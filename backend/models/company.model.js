@@ -5,13 +5,13 @@ const companySchema = new mongoose.Schema(
     name: {
       type: String,
       required: "Name is required",
+      unique: true,
     },
     location: {
       type: String,
     },
     description: {
       type: String,
-      required: "Description is required",
     },
     website: {
       type: String,
