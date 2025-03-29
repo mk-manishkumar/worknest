@@ -8,9 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { USER_API_END_POINT } from "../../utils/constant";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../../redux/authSlice";
 
 const Login = () => {
+  const { loading } = useSelector((store) => store.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [input, setInput] = useState({
     email: "",
@@ -26,6 +30,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
+      dispatch(setLoading(true));
       const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
         headers: {
           "Content-Type": "application/json",
@@ -39,6 +44,8 @@ const Login = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
@@ -51,12 +58,12 @@ const Login = () => {
 
           <div className="my-2">
             <Label>Email</Label>
-            <Input type="email" placeholder="Enter your email" value={input.email} name="email" onChange={handleChange} />
+            <Input type="email" placeholder="Enter your email" value={input.email} name="email" onChange={handleChange} className="mt-2 outline-none" />
           </div>
 
           <div className="my-2">
             <Label>Password</Label>
-            <Input type="password" placeholder="Enter your password" value={input.password} name="password" onChange={handleChange} />
+            <Input type="password" placeholder="Enter your password" value={input.password} name="password" onChange={handleChange} className="mt-2 outline-none" />
           </div>
 
           <div className="my-5">
@@ -71,10 +78,15 @@ const Login = () => {
               </div>
             </RadioGroup>
           </div>
-
-          <Button type="submit" className="w-full my-4">
-            Login
-          </Button>
+          {loading ? (
+            <Button className="w-full my-4" disabled>
+              Please wait..
+            </Button>
+          ) : (
+            <Button type="submit" className="w-full my-4">
+              Login
+            </Button>
+          )}
 
           <span className="text-sm">
             Don't have an account?{" "}
