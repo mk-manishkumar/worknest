@@ -1,10 +1,9 @@
 import React from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { User2, LogOut } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const user = false;
@@ -18,12 +17,15 @@ const Navbar = () => {
         </div>
         <div className="flex items-center gap-12">
           <ul className="flex items-center gap-5 font-medium">
-            <li>Home</li>
-            <li>Jobs</li>
-            <li>Browse</li>
-            {/* <li><Link>Home</Link></li>
-          <li><Link>Jobs</Link></li>
-          <li><Link>Browse</Link></li> */}
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/jobs">Jobs</Link>
+            </li>
+            <li>
+              <Link to="/browse">Browse</Link>
+            </li>
           </ul>
           {!user ? (
             <div className="flex gap-2 items-center">
