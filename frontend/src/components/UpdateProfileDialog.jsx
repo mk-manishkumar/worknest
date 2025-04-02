@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import { setUser } from "../redux/authSlice";
 import { USER_API_END_POINT } from "../utils/constant";
 
-
 const UpdateProfileDialog = ({ open, setOpen }) => {
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((store) => store.auth);
@@ -44,6 +43,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     if (input.file) formData.append("file", input.file);
 
     try {
+      setLoading(true);
       const res = await axios.post(`${USER_API_END_POINT}/profile/update`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -57,6 +57,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
     setOpen(false);
   };
@@ -74,7 +76,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 <Label htmlFor="name" className="text-right">
                   Name
                 </Label>
-                <Input id="name" className="col-span-3 mt-2" name="name" type="text" value={input.fullname} onChange={changeEventHandler} />
+                <Input id="name" className="col-span-3 mt-2" name="fullname" type="text" value={input.fullname} onChange={changeEventHandler} />
               </div>
               <div>
                 <Label htmlFor="email" className="text-right">
@@ -86,7 +88,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 <Label htmlFor="contact" className="text-right">
                   Contact
                 </Label>
-                <Input id="contact" className="col-span-3 mt-2" name="contact" type="number" value={input.phoneNumber} onChange={changeEventHandler} />
+                <Input id="contact" className="col-span-3 mt-2" name="phoneNumber" type="number" value={input.phoneNumber} onChange={changeEventHandler} />
               </div>
               <div>
                 <Label htmlFor="bio" className="text-right">

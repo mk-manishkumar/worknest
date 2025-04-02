@@ -24,7 +24,7 @@ const Profile = () => {
         <div className="flex items-center gap-12">
           <div className="flex items-center gap-12 w-[90%]">
             <Avatar className="h-24 w-24">
-              <AvatarImage src="https://cdn-icons-png.flaticon.com/512/9187/9187604.png" alt="profile_image" />
+              <AvatarImage src={user?.profile?.profilePhoto} alt={user?.fullname} />
             </Avatar>
             <div>
               <h1 className="font-medium text-xl">{user?.fullname}</h1>
@@ -53,8 +53,8 @@ const Profile = () => {
         <div className="grid  w-full max-w-sm items-center gap-2">
           <Label className="text-md font-bold">Resume</Label>
           {isResume ? (
-            <a href="https://y.com" target="_blank" className="text-blue-500 w-full hover:underline cursor-pointer">
-              {user?.fullname}
+            <a href={user?.profile?.resume} target="_blank" className="text-blue-500 w-full hover:underline cursor-pointer">
+              {user?.profile?.resumeOriginalName}
             </a>
           ) : (
             <span>NA</span>
