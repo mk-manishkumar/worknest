@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./shared/Navbar";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -7,15 +7,33 @@ import { useParams } from "react-router-dom";
 import { setSingleJob } from "../redux/jobSlice";
 import axios from "axios";
 import { JOB_API_END_POINT } from "../utils/constant";
+import { APPLICATION_API_END_POINT } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
 
 const JobDescription = () => {
-  const isApplied = false;
   const params = useParams();
   const jobId = params.id;
   const { user } = useSelector((store) => store.auth);
   const { singleJob } = useSelector((store) => store.job);
   const dispatch = useDispatch();
+  const isInitiallyApplied = singleJob?.applications?.some((application) => application.applicant === user?._id) || false;
+  const [isApplied, setIsApplied] = useState(isInitiallyApplied);
+
+  const applyJobHandler = async () => {
+    try {
+      const res = await axios.get(`${APPLICATION_API_END_POINT}/apply/${jobId}`, { withCredentials: true });
+      if (res.data.success) {
+        setIsApplied(true); //update the local state
+        const updateSingleJob = { ...singleJob, applications: [...singleJob.applications, { applicant: user?._id }] };
+        dispatch(setSingleJob(updateSingleJob)); // for real time UI update
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
 
   useEffect(() => {
     const fetchSingleJob = async () => {
@@ -23,6 +41,8 @@ const JobDescription = () => {
         const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, { withCredentials: true });
         if (res.data.success) {
           dispatch(setSingleJob(res.data.job));
+          //ensure the state is in sync with fetched data
+          setIsApplied(res.data.job.applications.some((application) => application.applicant === user?._id));
         }
       } catch (error) {
         console.log(error);
@@ -46,11 +66,11 @@ const JobDescription = () => {
               {singleJob?.jobType}
             </Badge>
             <Badge className="text-purple-700 font-bold" variant="ghost">
-              {singleJob?.salary}  LPA
+              {singleJob?.salary} LPA
             </Badge>
           </div>
         </div>
-        <Button disabled={isApplied} className={`rounded-lg ${isApplied ? "bg-gray-600 cursor-not-allowed" : "bg-purple-700 hover:bg-[#5f32y]"}`}>
+        <Button onClick={isApplied ? null : applyJobHandler} disabled={isApplied} className={`rounded-lg ${isApplied ? "bg-gray-600 cursor-not-allowed" : "bg-purple-700 hover:bg-[#5f32y] cursor-pointer"}`}>
           {isApplied ? "Already Applied" : "Apply Now"}
         </Button>
       </div>
