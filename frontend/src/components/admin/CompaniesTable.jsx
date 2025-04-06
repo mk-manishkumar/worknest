@@ -46,7 +46,7 @@ const CompaniesTable = () => {
               <TableRow key={company._id}>
                 <TableCell>
                   <Avatar>
-                    <AvatarImage src={company.logo} />
+                    <AvatarImage src={company?.logo || "https://assets.turbologo.com/blog/en/2019/05/19085137/no-logo.png"} />
                   </Avatar>
                 </TableCell>
                 <TableCell>{company.name}</TableCell>
