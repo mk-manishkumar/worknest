@@ -19,16 +19,16 @@ const jobSchema = new mongoose.Schema(
       required: "Location is required",
     },
     salary: {
-      type: Number,
+      type: String,
       required: "Salary is required",
     },
     experienceLevel: {
-      type: Number,
+      type: String,
       required: "Experience is required",
     },
     jobType: {
       type: String,
-      enum: ["Full-time", "Part-time", "Contract", "Internship"],
+      enum: ["Full time", "Part time", "Contract", "Internship", "Freelance"],
       required: "Job type is required",
     },
     jobOpenings: {
