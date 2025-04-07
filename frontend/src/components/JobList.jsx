@@ -25,9 +25,9 @@ const JobList = ({ job }) => {
       </div>
 
       <div className="flex items-center gap-2 my-2">
-        <Button className="bg-transparent">
+        <Button className="bg-transparent p-6" variant="outlline" size="icon">
           <Avatar>
-            <AvatarImage src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" />
+            <AvatarImage src={job?.company?.logo} />
           </Avatar>
         </Button>
         <div>
@@ -49,7 +49,7 @@ const JobList = ({ job }) => {
           {job?.jobType}
         </Badge>
         <Badge className="text-purple-700 font-bold" variant="ghost">
-          {job?.salary} LPA
+          {job?.salary} 
         </Badge>
       </div>
 

@@ -20,9 +20,9 @@ const Companies = () => {
   }, [input]);
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="max-w-6xl mx-auto mt-10 mb-68 ">
+      <div className="flex-grow max-w-6xl mx-auto my-10 w-full">
         <div className="flex justify-between items-center my-5">
           <Input className="w-fit" placeholder="Filter by name" onChange={(e) => setInput(e.target.value)} />
           <Button onClick={() => navigate("/admin/companies/create")} className="cursor-pointer">

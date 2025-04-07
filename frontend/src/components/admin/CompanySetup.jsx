@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import { COMPANY_API_END_POINT } from "../../utils/constant";
 import useGetCompanyById from "./../../hooks/useGetCompanyById";
+import Footer from "../shared/Footer";
 
 const CompanySetup = () => {
   const params = useParams();
@@ -126,6 +127,7 @@ const CompanySetup = () => {
           )}
         </form>
       </div>
+      <Footer/>
     </div>
   );
 };
