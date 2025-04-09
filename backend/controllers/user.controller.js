@@ -149,7 +149,9 @@ export const updateProfile = async (req, res) => {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
     const file = req.file;
     const fileURI = getDataUri(file);
-    const cloudResponse = await cloudinary.uploader.upload(fileURI.content);
+    const cloudResponse = await cloudinary.uploader.upload(fileURI.content, {
+      resource_type: "raw",
+    });
 
     // convert skills to array
     let skillsArray = [];
