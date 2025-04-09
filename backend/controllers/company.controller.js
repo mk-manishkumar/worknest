@@ -1,6 +1,8 @@
 import { Company } from "./../models/company.model.js";
 import getDataUri from "./../utils/dataURI.js";
 import cloudinary from "./../utils/cloudinary.js";
+import { Job } from "../models/job.model.js";
+import { Application } from './../models/application.model.js';
 
 // ==================== REGISTER COMPANY ====================
 export const registerCompany = async (req, res) => {
@@ -119,6 +121,45 @@ export const updateCompany = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+// ==================== DELETE COMPANY ====================
+
+export const deleteCompany = async (req, res) => {
+  try {
+    const companyId = req.params.id;
+
+    // Delete the company
+    const company = await Company.findByIdAndDelete(companyId);
+
+    if (!company) {
+      return res.status(404).json({
+        message: "Company not found",
+        success: false,
+      });
+    }
+
+    // Find all jobs of the company
+    const jobs = await Job.find({ company: companyId });
+    const jobIds = jobs.map((job) => job._id);
+
+    // Delete all applications for these jobs
+    await Application.deleteMany({ job: { $in: jobIds } });
+
+    // Delete all jobs of the company
+    await Job.deleteMany({ company: companyId });
+
+    return res.status(200).json({
+      message: "Company, associated jobs, and applications deleted successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.log("Error deleting company:", error);
     return res.status(500).json({
       message: "Internal server error",
       success: false,
