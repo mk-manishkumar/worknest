@@ -43,13 +43,13 @@ const JobList = ({ job }) => {
 
       <div className="flex gap-2 mt-4 items-center">
         <Badge className="text-blue-700 font-bold" variant="ghost">
-          {job?.jobOpenings} Positions
+          {job?.jobOpenings} {job?.jobOpenings === 1 ? "Position" : "Positions"}
         </Badge>
         <Badge className="text-red-700 font-bold" variant="ghost">
           {job?.jobType}
         </Badge>
         <Badge className="text-purple-700 font-bold" variant="ghost">
-          {job?.salary} 
+          {job?.salary}
         </Badge>
       </div>
 

@@ -135,7 +135,9 @@ export const getApplicants = async (req, res) => {
 export const applicationStatus = async (req, res) => {
   try {
     const { status } = req.body;
-    const applicationId = req.body.id;
+    const applicationId = req.params.id;
+    console.log(applicationId);
+    
 
     if (!status) {
       return res.status(400).json({
