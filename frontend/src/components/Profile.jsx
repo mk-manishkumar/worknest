@@ -10,6 +10,7 @@ import Footer from "./shared/Footer";
 import UpdateProfileDialog from "./UpdateProfileDialog";
 import { useSelector } from "react-redux";
 import useGetAppliedJobs from "../hooks/useGetAppliedJobs";
+import { motion } from "framer-motion";
 
 const isResume = true;
 
@@ -22,7 +23,7 @@ const Profile = () => {
     <div>
       <Navbar />
 
-      <div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl my-5 p-8">
+      <motion.div initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -100 }} transition={{ duration: 0.3 }} className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl my-5 p-8">
         <div className="flex items-center gap-12">
           <div className="flex items-center gap-12 w-[90%]">
             <Avatar className="h-24 w-24">
@@ -62,7 +63,7 @@ const Profile = () => {
             <span>NA</span>
           )}
         </div>
-      </div>
+      </motion.div>
       <div className="max-w-4xl mx-auto bg-white rounded-2xl mb-10">
         <h2 className="font-bold text-lg my-5">All Applied Jobs</h2>
         <AppliedJobTable />
