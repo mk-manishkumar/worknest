@@ -12,7 +12,6 @@ const Browse = () => {
   const dispatch = useDispatch();
   const [filteredJobs, setFilteredJobs] = useState([]);
 
-  // Filter jobs based on search query from HeroSection
   useEffect(() => {
     if (searchedQuery) {
       const filtered = allJobs.filter((job) => job.title.toLowerCase().includes(searchedQuery.toLowerCase()) || job.description.toLowerCase().includes(searchedQuery.toLowerCase()) || job.location.toLowerCase().includes(searchedQuery.toLowerCase()) || job.jobType?.toLowerCase().includes(searchedQuery.toLowerCase()));
@@ -22,30 +21,33 @@ const Browse = () => {
     }
   }, [allJobs, searchedQuery]);
 
-  // Clear search query when leaving the page
   useEffect(() => {
     return () => {
       dispatch(setSearchedQuery(""));
     };
   }, []);
 
-  // Use filteredJobs if there's a search query, otherwise use all jobs
   const jobsToDisplay = searchedQuery ? filteredJobs : allJobs;
 
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="flex-grow max-w-7xl mx-auto my-10 w-full">
-        <h1 className="font-bold text-xl my-10">
+      <div className="flex-grow px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto my-5 sm:my-8 md:my-10 w-full">
+        <h1 className="font-bold text-lg sm:text-xl my-5 sm:my-8 md:my-10">
           {searchedQuery ? `Results for "${searchedQuery}"` : "All Jobs"} ({jobsToDisplay.length})
         </h1>
-        <div className="grid grid-cols-3 gap-4">
-          {jobsToDisplay.map((job, index) => (
-            <div key={job._id || index}>
-              <JobList job={job} />
-            </div>
-          ))}
-        </div>
+
+        {jobsToDisplay.length === 0 ? (
+          <div className="text-center py-10 text-gray-500">No jobs found. Please try a different search.</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {jobsToDisplay.map((job, index) => (
+              <div key={job._id || index}>
+                <JobList job={job} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <Footer />
     </div>
