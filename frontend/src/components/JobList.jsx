@@ -16,48 +16,48 @@ const JobList = ({ job }) => {
   };
 
   return (
-    <div className="p-5 rounded-md shadow-xl bg-white border border-gray-100">
+    <div className="p-3 sm:p-4 md:p-5 rounded-md shadow-md hover:shadow-xl transition-shadow bg-white border border-gray-100">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-500">{job?.createdAt ? `${daysAgoFunc(job?.createdAt)} days ago` : "Today"}</p>
-        <Button variant="outline" className="rounded-full" size="icon">
-          <Bookmark />
+        <p className="text-xs sm:text-sm text-gray-500">{job?.createdAt ? `${daysAgoFunc(job?.createdAt)} days ago` : "Today"}</p>
+        <Button variant="outline" className="rounded-full h-8 w-8 p-0" size="icon">
+          <Bookmark size={16} />
         </Button>
       </div>
 
       <div className="flex items-center gap-2 my-2">
-        <Button className="bg-transparent p-6" variant="outlline" size="icon">
-          <Avatar>
-            <AvatarImage src={job?.company?.logo} />
+        <Button className="bg-transparent p-0 sm:p-1 md:p-2" variant="outline" size="icon">
+          <Avatar className="h-10 w-10">
+            <AvatarImage src={job?.company?.logo} alt={job?.company?.name} />
           </Avatar>
         </Button>
         <div>
-          <h1 className="font-medium text-lg">{job?.company?.name}</h1>
-          <p className="text-sm text-gray-500">{job?.location}</p>
+          <h1 className="font-medium text-base sm:text-lg line-clamp-1">{job?.company?.name}</h1>
+          <p className="text-xs sm:text-sm text-gray-500">{job?.location}</p>
         </div>
       </div>
 
       <div>
-        <h2 className="font-bold text-lg my-2">{job?.title}</h2>
-        <p className="text-sm text-gray-600">{job?.description}</p>
+        <h2 className="font-bold text-base sm:text-lg my-2 line-clamp-1">{job?.title}</h2>
+        <p className="text-xs sm:text-sm text-gray-600 line-clamp-3">{job?.description}</p>
       </div>
 
-      <div className="flex gap-2 mt-4 items-center">
-        <Badge className="text-blue-700 font-bold" variant="ghost">
+      <div className="flex flex-wrap gap-2 mt-3 md:mt-4 items-center">
+        <Badge className="text-xs text-blue-700 font-medium" variant="ghost">
           {job?.jobOpenings} {job?.jobOpenings === 1 ? "Position" : "Positions"}
         </Badge>
-        <Badge className="text-red-700 font-bold" variant="ghost">
+        <Badge className="text-xs text-red-700 font-medium" variant="ghost">
           {job?.jobType}
         </Badge>
-        <Badge className="text-purple-700 font-bold" variant="ghost">
+        <Badge className="text-xs text-purple-700 font-medium" variant="ghost">
           {job?.salary}
         </Badge>
       </div>
 
-      <div className="flex items-center gap-4 mt-4">
-        <Button onClick={() => navigate(`/description/${job?._id}`)} variant="outline">
+      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mt-3 md:mt-4">
+        <Button onClick={() => navigate(`/description/${job?._id}`)} variant="outline" className="w-full sm:w-auto text-xs sm:text-sm py-1 h-8 sm:h-9">
           See Details
         </Button>
-        <Button className="bg-purple-700">Save for Later</Button>
+        <Button className="bg-purple-700 hover:bg-purple-800 w-full sm:w-auto text-xs sm:text-sm py-1 h-8 sm:h-9">Save for Later</Button>
       </div>
     </div>
   );
