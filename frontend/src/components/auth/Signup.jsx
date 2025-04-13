@@ -71,27 +71,29 @@ const Signup = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex justify-center items-center mx-auto max-w-7xl ">
-        <form onSubmit={handleSubmit} className="w-1/2 border-gray-200 rounded-md p-4 my-18">
+      <div className="flex justify-center items-center px-4 md:px-6 mx-auto max-w-7xl">
+        <form onSubmit={handleSubmit} className="w-full md:w-3/4 lg:w-2/3 xl:w-1/2 border border-gray-200 rounded-md p-4 my-8 md:my-16">
           <h1 className="font-bold text-xl mb-5">Sign Up</h1>
           <div className="my-2">
-            <Label>Full Name</Label>
+            <Label className="my-2">Full Name</Label>
             <Input type="text" placeholder="Enter your full name" value={input.fullname} name="fullname" onChange={handleChange} />
           </div>
           <div className="my-2">
-            <Label>Email</Label>
+            <Label className="my-2">Email</Label>
             <Input type="email" placeholder="Enter your email" value={input.email} name="email" onChange={handleChange} />
           </div>
           <div className="my-2">
-            <Label>Phone Number</Label>
+            <Label className="my-2">Phone Number</Label>
             <Input type="number" placeholder="Enter your phone number" value={input.phoneNumber} name="phoneNumber" onChange={handleChange} />
           </div>
           <div className="my-2">
-            <Label>Password</Label>
+            <Label className="my-2">Password</Label>
             <Input type="password" placeholder="Enter your password" value={input.password} name="password" onChange={handleChange} />
           </div>
-          <div className="flex justify-between items-center">
-            <RadioGroup className="flex items-center gap-4 my-5">
+
+          {/* Responsive radio and file upload layout */}
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+            <RadioGroup className="flex items-center gap-4 my-3">
               <div className="flex items-center space-x-2">
                 <Input type="radio" value="student" name="role" className="cursor-pointer" checked={input.role === "student"} onChange={handleChange} />
                 <Label htmlFor="r1">Student</Label>
@@ -101,9 +103,9 @@ const Signup = () => {
                 <Label htmlFor="r2">Recruiter</Label>
               </div>
             </RadioGroup>
-            <div className="flex items-center gap-2">
-              <Label>Profile Image</Label>
-              <input accept="image/*" type="file" className="border-2 p-1 rounded-sm cursor-pointer" onChange={handleFile} />
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+              <Label className="whitespace-nowrap">Profile Image</Label>
+              <input accept="image/*" type="file" className="border-2 p-1 rounded-sm cursor-pointer w-full sm:w-auto text-sm" onChange={handleFile} />
             </div>
           </div>
 
@@ -116,12 +118,12 @@ const Signup = () => {
               Sign Up
             </Button>
           )}
-          <span>
+          <div className="text-sm">
             Already have an account?{" "}
-            <Link to="/login" className="text-blue-600 text-sm">
+            <Link to="/login" className="text-blue-600">
               Click here to login
             </Link>
-          </span>
+          </div>
         </form>
       </div>
     </div>

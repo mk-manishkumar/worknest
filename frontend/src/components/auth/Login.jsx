@@ -57,50 +57,56 @@ const Login = () => {
   }, []);
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex justify-center items-center mx-auto max-w-7xl min-h-screen">
-        <form onSubmit={handleSubmit} className="w-1/2 border border-gray-200 rounded-md p-4 my-10">
-          <h1 className="font-bold text-xl mb-5">Login</h1>
+      <div className="flex-grow flex justify-center items-center px-4 sm:px-6 py-8">
+        <form onSubmit={handleSubmit} className="w-full max-w-md sm:max-w-lg md:max-w-xl border border-gray-200 rounded-md p-4 sm:p-6 my-4 sm:my-6 md:my-10 shadow-md">
+          <h1 className="font-bold text-xl mb-4 sm:mb-5">Login</h1>
 
-          <div className="my-2">
-            <Label>Email</Label>
-            <Input type="email" placeholder="Enter your email" value={input.email} name="email" onChange={handleChange} className="mt-2 outline-none" />
+          <div className="my-3">
+            <Label className="text-sm sm:text-base">Email</Label>
+            <Input type="email" placeholder="Enter your email" value={input.email} name="email" onChange={handleChange} className="mt-1 sm:mt-2 outline-none text-sm sm:text-base" />
           </div>
 
-          <div className="my-2">
-            <Label>Password</Label>
-            <Input type="password" placeholder="Enter your password" value={input.password} name="password" onChange={handleChange} className="mt-2 outline-none" />
+          <div className="my-3">
+            <Label className="text-sm sm:text-base">Password</Label>
+            <Input type="password" placeholder="Enter your password" value={input.password} name="password" onChange={handleChange} className="mt-1 sm:mt-2 outline-none text-sm sm:text-base" />
           </div>
 
-          <div className="my-5">
-            <RadioGroup value={input.role} onValueChange={(value) => setInput({ ...input, role: value })} className="flex items-center gap-4">
+          <div className="my-4 sm:my-5">
+            <Label className="block mb-2 text-sm sm:text-base">Select your role</Label>
+            <RadioGroup value={input.role} onValueChange={(value) => setInput({ ...input, role: value })} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="student" id="student" className="cursor-pointer" />
-                <Label htmlFor="student">Student</Label>
+                <Label htmlFor="student" className="text-sm sm:text-base cursor-pointer">
+                  Student
+                </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="recruiter" id="recruiter" className="cursor-pointer" />
-                <Label htmlFor="recruiter">Recruiter</Label>
+                <Label htmlFor="recruiter" className="text-sm sm:text-base cursor-pointer">
+                  Recruiter
+                </Label>
               </div>
             </RadioGroup>
           </div>
+
           {loading ? (
-            <Button className="w-full my-4" disabled>
+            <Button className="w-full my-3 sm:my-4" disabled>
               Please wait..
             </Button>
           ) : (
-            <Button type="submit" className="w-full my-4">
+            <Button type="submit" className="w-full my-3 sm:my-4">
               Login
             </Button>
           )}
 
-          <span className="text-sm">
+          <div className="text-xs sm:text-sm text-center sm:text-left">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-blue-600">
+            <Link to="/signup" className="text-blue-600 hover:underline">
               Click here to create an account
             </Link>
-          </span>
+          </div>
         </form>
       </div>
     </div>
