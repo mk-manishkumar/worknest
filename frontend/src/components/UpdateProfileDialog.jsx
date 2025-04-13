@@ -66,56 +66,56 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
   return (
     <div>
       <Dialog open={open}>
-        <DialogContent className="sm:max-w-[425px]" onInteractOutside={() => setOpen(false)}>
+        <DialogContent className="w-[95%] max-w-md mx-auto p-4 sm:p-6" onInteractOutside={() => setOpen(false)}>
           <DialogHeader>
-            <DialogTitle>Update Profile</DialogTitle>
+            <DialogTitle className="text-center sm:text-left">Update Profile</DialogTitle>
           </DialogHeader>
           <form onSubmit={submitHandler}>
-            <div className="grid gap-4 py-4">
+            <div className="grid gap-3 py-3 sm:gap-4 sm:py-4">
               <div>
-                <Label htmlFor="name" className="text-right">
+                <Label htmlFor="name" className="text-sm sm:text-base">
                   Name
                 </Label>
-                <Input id="name" className="col-span-3 mt-2" name="fullname" type="text" value={input.fullname} onChange={changeEventHandler} />
+                <Input id="name" className="mt-1 sm:mt-2 text-sm sm:text-base" name="fullname" type="text" value={input.fullname} onChange={changeEventHandler} />
               </div>
               <div>
-                <Label htmlFor="email" className="text-right">
+                <Label htmlFor="email" className="text-sm sm:text-base">
                   Email
                 </Label>
-                <Input id="email" className="col-span-3 mt-2" name="email" type="email" value={input.email} onChange={changeEventHandler} />
+                <Input id="email" className="mt-1 sm:mt-2 text-sm sm:text-base" name="email" type="email" value={input.email} onChange={changeEventHandler} />
               </div>
               <div>
-                <Label htmlFor="contact" className="text-right">
+                <Label htmlFor="contact" className="text-sm sm:text-base">
                   Contact
                 </Label>
-                <Input id="contact" className="col-span-3 mt-2" name="phoneNumber" type="number" value={input.phoneNumber} onChange={changeEventHandler} />
+                <Input id="contact" className="mt-1 sm:mt-2 text-sm sm:text-base" name="phoneNumber" type="number" value={input.phoneNumber} onChange={changeEventHandler} />
               </div>
               <div>
-                <Label htmlFor="bio" className="text-right">
+                <Label htmlFor="bio" className="text-sm sm:text-base">
                   Bio
                 </Label>
-                <Input id="bio" className="col-span-3 mt-2" name="bio" type="text" value={input.bio} onChange={changeEventHandler} />
+                <Input id="bio" className="mt-1 sm:mt-2 text-sm sm:text-base" name="bio" type="text" value={input.bio} onChange={changeEventHandler} />
               </div>
               <div>
-                <Label htmlFor="skills" className="text-right">
+                <Label htmlFor="skills" className="text-sm sm:text-base">
                   Skills
                 </Label>
-                <Input id="skills" className="col-span-3 mt-2" name="skills" type="text" value={input.skills} onChange={changeEventHandler} />
+                <Input id="skills" className="mt-1 sm:mt-2 text-sm sm:text-base" name="skills" type="text" value={input.skills} onChange={changeEventHandler} />
               </div>
               <div>
-                <Label htmlFor="resume" className="text-right">
+                <Label htmlFor="resume" className="text-sm sm:text-base">
                   Resume
                 </Label>
-                <Input id="resume" className="col-span-3 mt-2" name="resume" type="file" accept="application/pdf" onChange={fileChangeHandler} />
+                <Input id="resume" className="mt-1 sm:mt-2 text-sm sm:text-base file:mr-4 file:py-1 file:px-2 file:rounded-md file:text-sm" name="resume" type="file" accept="application/pdf" onChange={fileChangeHandler} />
               </div>
             </div>
-            <DialogFooter>
+            <DialogFooter className="flex justify-center sm:justify-end mt-2">
               {loading ? (
-                <Button className="w-full my-4" disabled>
+                <Button className="w-full sm:w-auto my-2 sm:my-3" disabled>
                   Please wait..
                 </Button>
               ) : (
-                <Button type="submit" className="w-full my-4">
+                <Button type="submit" className="w-full sm:w-auto my-2 sm:my-3">
                   Update
                 </Button>
               )}
