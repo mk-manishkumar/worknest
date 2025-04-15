@@ -41,29 +41,29 @@ const CreateCompany = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
 
-      <div className="max-w-4xl mx-auto">
-        <div className="my-10">
-          <h1 className="font-bold text-2xl">Your Company Name</h1>
-          <p className="text-gray-500">What name would you like to give your company? You can change it later.</p>
+      <div className="flex-grow w-full px-4 sm:px-6 md:max-w-4xl md:mx-auto py-6 md:py-10">
+        <div className="mb-6 md:mb-10">
+          <h1 className="font-bold text-xl md:text-2xl">Your Company Name</h1>
+          <p className="text-gray-500 text-sm md:text-base mt-2">What name would you like to give your company? You can change it later.</p>
         </div>
 
-        <Label>Company Name</Label>
-        <Input type="text" className="my-2" placeholder="Worknest, Meta, Google" onChange={(e) => setCompanyName(e.target.value)} />
+        <Label className="text-sm md:text-base">Company Name</Label>
+        <Input type="text" className="w-full my-2" placeholder="Worknest, Meta, Google" onChange={(e) => setCompanyName(e.target.value)} />
 
-        <div className="flex items-center gap-2 mt-10 mb-49">
-          <Button className="cursor-pointer" variant="outline" onClick={() => navigate("/admin/companies")}>
+        <div className="flex flex-col sm:flex-row items-center gap-3 mt-6 md:mt-10">
+          <Button className="w-full sm:w-auto cursor-pointer order-2 sm:order-1" variant="outline" onClick={() => navigate("/admin/companies")}>
             Cancel
           </Button>
-          <Button onClick={registerNewCompany} className="cursor-pointer">
+          <Button onClick={registerNewCompany} className="w-full sm:w-auto cursor-pointer order-1 sm:order-2">
             Continue
           </Button>
         </div>
       </div>
 
-      <Footer/>
+      <Footer />
     </div>
   );
 };
