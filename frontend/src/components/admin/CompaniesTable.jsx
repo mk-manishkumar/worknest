@@ -47,56 +47,58 @@ const CompaniesTable = () => {
   };
 
   return (
-    <div>
-      <Table>
-        <TableCaption>A list of your recently registered companies</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Logo</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead className="text-right">Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filterCompany.length === 0 ? (
+    <div className="w-full overflow-hidden rounded-lg border">
+      <div className="overflow-x-auto">
+        <Table>
+          <TableCaption className="text-xs sm:text-sm">A list of your recently registered companies</TableCaption>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={4} className="text-center py-4 text-muted-foreground">
-                You haven't registered any companies yet
-              </TableCell>
+              <TableHead className="w-16">Logo</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead className="hidden sm:table-cell">Date</TableHead>
+              <TableHead className="text-right">Action</TableHead>
             </TableRow>
-          ) : (
-            filterCompany.map((company) => (
-              <TableRow key={company._id}>
-                <TableCell>
-                  <Avatar>
-                    <AvatarImage src={company?.logo || "https://assets.turbologo.com/blog/en/2019/05/19085137/no-logo.png"} />
-                  </Avatar>
-                </TableCell>
-                <TableCell>{company.name}</TableCell>
-                <TableCell>{company.createdAt?.split("T")[0]}</TableCell>
-                <TableCell className="text-right">
-                  <Popover>
-                    <PopoverTrigger>
-                      <MoreHorizontal className="cursor-pointer" />
-                    </PopoverTrigger>
-                    <PopoverContent className="w-32">
-                      <div className="flex items-center gap-2 w-fit cursor-pointer" onClick={() => navigate(`/admin/companies/${company._id}`)}>
-                        <Edit2 className="w-4" />
-                        <span>Edit</span>
-                      </div>
-                      <div onClick={() => handleDeleteClick(company._id)} className="flex items-center w-fit gap-2 cursor-pointer mt-2 text-red-600">
-                        <Delete className="w-4" />
-                        <span>Delete</span>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
+          </TableHeader>
+          <TableBody>
+            {filterCompany.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center py-4 text-muted-foreground text-sm">
+                  You haven't registered any companies yet
                 </TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+            ) : (
+              filterCompany.map((company) => (
+                <TableRow key={company._id}>
+                  <TableCell>
+                    <Avatar className="w-8 h-8 md:w-10 md:h-10">
+                      <AvatarImage src={company?.logo || "https://assets.turbologo.com/blog/en/2019/05/19085137/no-logo.png"} />
+                    </Avatar>
+                  </TableCell>
+                  <TableCell className="text-xs sm:text-sm font-medium">{company.name}</TableCell>
+                  <TableCell className="hidden sm:table-cell text-xs sm:text-sm">{company.createdAt?.split("T")[0]}</TableCell>
+                  <TableCell className="text-right">
+                    <Popover>
+                      <PopoverTrigger>
+                        <MoreHorizontal className="cursor-pointer w-5 h-5 ml-auto" />
+                      </PopoverTrigger>
+                      <PopoverContent className="w-32 p-2">
+                        <div className="flex items-center gap-2 w-full cursor-pointer p-2 hover:bg-gray-100 rounded-md text-xs sm:text-sm" onClick={() => navigate(`/admin/companies/${company._id}`)}>
+                          <Edit2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                          <span>Edit</span>
+                        </div>
+                        <div onClick={() => handleDeleteClick(company._id)} className="flex items-center w-full gap-2 cursor-pointer p-2 hover:bg-gray-100 rounded-md mt-1 text-red-600 text-xs sm:text-sm">
+                          <Delete className="w-3 h-3 sm:w-4 sm:h-4" />
+                          <span>Delete</span>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };

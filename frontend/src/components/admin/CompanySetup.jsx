@@ -82,52 +82,49 @@ const CompanySetup = () => {
   }, [singleCompany]);
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
 
-      <div className="max-w-xl mx-auto my-10">
+      <div className="flex-grow w-full px-4 md:max-w-xl md:mx-auto py-6 md:py-10">
         <form onSubmit={submitHandler}>
-          <div className="flex items-center gap-5 p-8">
-            <Button variant="outline" className="flex items-center gap-2 text-gray-500 font-semibold cursor-pointer" onClick={() => navigate(-1)}>
-              <ArrowLeft />
+          <div className="flex items-center gap-3 mb-6 p-2 sm:p-4">
+            <Button variant="outline" className="p-2 sm:p-3 flex items-center gap-1 sm:gap-2 text-gray-500 text-xs sm:text-sm cursor-pointer" onClick={() => navigate(-1)}>
+              <ArrowLeft className="w-4 h-4" />
               <span>Back</span>
             </Button>
-            <h2 className="font-bold text-xl">Company Setup</h2>
+            <h2 className="font-bold text-lg sm:text-xl">Company Setup</h2>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label className="mb-3">Company Name</Label>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="text-sm">Company Name</Label>
               <Input type="text" name="name" value={input.name} onChange={handleChange} />
             </div>
-            <div>
-              <Label className="mb-3">Description</Label>
+            <div className="space-y-2">
+              <Label className="text-sm">Description</Label>
               <Input type="text" name="description" value={input.description} onChange={handleChange} />
             </div>
-            <div>
-              <Label className="mb-3">Website</Label>
+            <div className="space-y-2">
+              <Label className="text-sm">Website</Label>
               <Input type="text" name="website" value={input.website} onChange={handleChange} />
             </div>
-            <div>
-              <Label className="mb-3">Location</Label>
+            <div className="space-y-2">
+              <Label className="text-sm">Location</Label>
               <Input type="text" name="location" value={input.location} onChange={handleChange} />
             </div>
-            <div>
-              <Label className="mb-3">Company Logo</Label>
-              <Input type="file" accept="image/*" onChange={handleFileChange} />
+            <div className="space-y-2 sm:col-span-2">
+              <Label className="text-sm">Company Logo</Label>
+              <Input type="file" accept="image/*" onChange={handleFileChange} className="text-sm" />
             </div>
           </div>
-          {loading ? (
-            <Button className="w-full my-4" disabled>
-              Please wait..
-            </Button>
-          ) : (
-            <Button type="submit" className="w-full my-4">
-              Update
-            </Button>
-          )}
+
+          <Button type="submit" className="w-full mt-6 md:mt-8" disabled={loading}>
+            {loading ? "Please wait.." : "Update"}
+          </Button>
         </form>
       </div>
-      <Footer/>
+
+      <Footer />
     </div>
   );
 };

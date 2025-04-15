@@ -22,14 +22,16 @@ const Companies = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="flex-grow max-w-6xl mx-auto my-10 w-full">
-        <div className="flex justify-between items-center my-5">
-          <Input className="w-fit" placeholder="Filter by name" onChange={(e) => setInput(e.target.value)} />
-          <Button onClick={() => navigate("/admin/companies/create")} className="cursor-pointer">
+      <div className="flex-grow w-full px-4 sm:px-6 md:max-w-6xl md:mx-auto my-6 md:my-10">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-5">
+          <Input className="w-full sm:w-64 md:w-72" placeholder="Filter by name" onChange={(e) => setInput(e.target.value)} />
+          <Button onClick={() => navigate("/admin/companies/create")} className="w-full sm:w-auto mt-2 sm:mt-0 cursor-pointer">
             New Company
           </Button>
         </div>
-        <CompaniesTable />
+        <div className="overflow-x-auto">
+          <CompaniesTable />
+        </div>
       </div>
       <Footer />
     </div>
