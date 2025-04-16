@@ -22,10 +22,10 @@ const JobsAdmin = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="flex-grow max-w-6xl mx-auto my-10 w-full">
-        <div className="flex items-center justify-between my-5">
-          <Input className="w-fit" placeholder="Filter by name, role" onChange={(e) => setInput(e.target.value)} />
-          <Button onClick={() => navigate("/admin/jobs/create")} className="cursor-pointer">
+      <div className="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-5 sm:py-10 w-full">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-5">
+          <Input className="w-full sm:w-64" placeholder="Filter by name, role" onChange={(e) => setInput(e.target.value)} />
+          <Button onClick={() => navigate("/admin/jobs/create")} className="cursor-pointer w-full sm:w-auto">
             New Job
           </Button>
         </div>
