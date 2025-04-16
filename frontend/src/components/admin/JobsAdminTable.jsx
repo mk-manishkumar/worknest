@@ -43,46 +43,59 @@ const JobsAdminTable = () => {
   }, [allAdminJobs, searchJobByText]);
 
   return (
-    <div>
+    <div className="overflow-x-auto w-full">
       <Table>
         <TableCaption>A list of your recent posted jobs</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Company Name</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead className="text-right">Action</TableHead>
+            <TableHead className="whitespace-nowrap hidden sm:table-cell">Company Name</TableHead>
+            <TableHead className="whitespace-nowrap">Role</TableHead>
+            <TableHead className="whitespace-nowrap hidden sm:table-cell">Date</TableHead>
+            <TableHead className="text-right whitespace-nowrap">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filterJobs?.map((job) => (
-            <TableRow key={job._id}>
-              <TableCell>{job?.company?.name}</TableCell>
-              <TableCell>{job?.title}</TableCell>
-              <TableCell>{job?.createdAt.split("T")[0]}</TableCell>
-              <TableCell className="text-right cursor-pointer">
-                <Popover>
-                  <PopoverTrigger>
-                    <MoreHorizontal />
-                  </PopoverTrigger>
-                  <PopoverContent className="w-32">
-                    <div onClick={() => navigate(`/admin/jobs/${job._id}/edit`)} className="flex items-center gap-2 w-fit cursor-pointer">
-                      <Edit2 className="w-4" />
-                      <span>Edit</span>
-                    </div>
-                    <div onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)} className="flex items-center w-fit gap-2 cursor-pointer mt-2">
-                      <Eye className="w-4" />
-                      <span>Applicants</span>
-                    </div>
-                    <div onClick={() => handleDeleteClick(job._id)} className="flex items-center w-fit gap-2 cursor-pointer mt-2 text-red-600">
-                      <Delete className="w-4" />
-                      <span>Delete</span>
-                    </div>
-                  </PopoverContent>
-                </Popover>
+          {filterJobs && filterJobs.length > 0 ? (
+            filterJobs.map((job) => (
+              <TableRow key={job._id}>
+                <TableCell className="hidden sm:table-cell">{job?.company?.name}</TableCell>
+                <TableCell>
+                  <div>
+                    <div>{job?.title}</div>
+                    <div className="text-sm text-gray-500 sm:hidden">{job?.company?.name}</div>
+                  </div>
+                </TableCell>
+                <TableCell className="hidden sm:table-cell">{job?.createdAt.split("T")[0]}</TableCell>
+                <TableCell className="text-right cursor-pointer">
+                  <Popover>
+                    <PopoverTrigger className="ml-auto block">
+                      <MoreHorizontal className="h-5 w-5" />
+                    </PopoverTrigger>
+                    <PopoverContent className="w-32 p-2">
+                      <div onClick={() => navigate(`/admin/jobs/${job._id}/edit`)} className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded cursor-pointer">
+                        <Edit2 className="w-4" />
+                        <span>Edit</span>
+                      </div>
+                      <div onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)} className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded cursor-pointer mt-1">
+                        <Eye className="w-4" />
+                        <span>Applicants</span>
+                      </div>
+                      <div onClick={() => handleDeleteClick(job._id)} className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded cursor-pointer mt-1 text-red-600">
+                        <Delete className="w-4" />
+                        <span>Delete</span>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-6">
+                No jobs found
               </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </div>

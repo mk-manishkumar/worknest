@@ -18,7 +18,7 @@ const Applicants = () => {
       try {
         const res = await axios.get(`${APPLICATION_API_END_POINT}/${params.id}/applicants`, { withCredentials: true });
         console.log(res);
-        
+
         dispatch(setAllApplicants(res.data.job));
       } catch (error) {
         console.log(error);
@@ -30,8 +30,8 @@ const Applicants = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="flex-grow max-w-7xl mx-auto w-full">
-        <h1 className="font-bold text-xl my-5">Applicants: {applicants?.applications?.length}</h1>
+      <div className="flex-grow px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full py-4">
+        <h1 className="font-bold text-lg sm:text-xl my-3 sm:my-5">Applicants: {applicants?.applications?.length || 0}</h1>
         <ApplicantsTable />
       </div>
       <Footer />

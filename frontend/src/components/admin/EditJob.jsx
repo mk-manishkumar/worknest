@@ -104,11 +104,13 @@ const EditJob = () => {
 
   if (fetchLoading) {
     return (
-      <div>
+      <div className="flex flex-col min-h-screen">
         <Navbar />
-        <div className="flex items-center justify-center w-full h-screen">
-          <Loader2 className="h-8 w-8 animate-spin" />
-          <span className="ml-2">Loading job details...</span>
+        <div className="flex items-center justify-center flex-grow">
+          <div className="flex items-center">
+            <Loader2 className="h-8 w-8 animate-spin" />
+            <span className="ml-2">Loading job details...</span>
+          </div>
         </div>
         <Footer />
       </div>
@@ -116,36 +118,36 @@ const EditJob = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="flex items-center justify-center w-full my-5">
-        <form onSubmit={submitHandler} className="p-8 max-w-4xl border border-gray-200 shadow-lg rounded-md my-8">
-          <h1 className="text-2xl font-bold mb-6 text-center">Edit Job</h1>
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <Label className="mb-3">Title</Label>
-              <Input type="text" name="title" value={input.title} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1" />
+      <div className="flex-grow flex items-center justify-center w-full px-4 py-5">
+        <form onSubmit={submitHandler} className="p-4 sm:p-6 md:p-8 w-full max-w-4xl border border-gray-200 shadow-lg rounded-md my-4 sm:my-8">
+          <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center">Edit Job</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+            <div className="space-y-1">
+              <Label>Title</Label>
+              <Input type="text" name="title" value={input.title} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0" />
             </div>
-            <div>
-              <Label className="mb-3">Description</Label>
-              <Input type="text" name="description" value={input.description} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1" />
+            <div className="space-y-1">
+              <Label>Description</Label>
+              <Input type="text" name="description" value={input.description} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0" />
             </div>
-            <div>
-              <Label className="mb-3">Requirements</Label>
-              <Input type="text" name="requirements" value={input.requirements} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1" />
+            <div className="space-y-1">
+              <Label>Requirements</Label>
+              <Input type="text" name="requirements" value={input.requirements} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0" />
             </div>
-            <div>
-              <Label className="mb-3">Salary</Label>
-              <Input type="text" name="salary" value={input.salary} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1" />
+            <div className="space-y-1">
+              <Label>Salary</Label>
+              <Input type="text" name="salary" value={input.salary} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0" />
             </div>
-            <div>
-              <Label className="mb-3">Location</Label>
-              <Input type="text" name="location" value={input.location} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1" />
+            <div className="space-y-1">
+              <Label>Location</Label>
+              <Input type="text" name="location" value={input.location} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0" />
             </div>
-            <div>
-              <Label className="mb-3">Job Type</Label>
+            <div className="space-y-1">
+              <Label>Job Type</Label>
               <Select onValueChange={(value) => setInput({ ...input, jobType: value })} value={input.jobType}>
-                <SelectTrigger className="w-full focus-visible:ring-offset-0 focus-visible:ring-0 my-1">
+                <SelectTrigger className="w-full focus-visible:ring-offset-0 focus-visible:ring-0">
                   <SelectValue placeholder="Select a job type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -159,37 +161,40 @@ const EditJob = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label className="mb-3">Experience Level</Label>
-              <Input type="text" name="experience" value={input.experience} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1" />
+            <div className="space-y-1">
+              <Label>Experience Level</Label>
+              <Input type="text" name="experience" value={input.experience} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0" />
             </div>
-            <div>
-              <Label className="mb-3">Number of Openings</Label>
-              <Input type="number" name="jobOpenings" value={input.jobOpenings} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1" />
+            <div className="space-y-1">
+              <Label>Number of Openings</Label>
+              <Input type="number" name="jobOpenings" value={input.jobOpenings} onChange={changeEventHandler} className="focus-visible:ring-offset-0 focus-visible:ring-0" />
             </div>
             {companies.length > 0 && (
-              <Select onValueChange={selectChangeHandler} value={input.companyId}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select a Company" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {companies.map((company) => (
-                      <SelectItem key={company._id} value={company._id}>
-                        {company.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              <div className="space-y-1 md:col-span-2">
+                <Label>Company</Label>
+                <Select onValueChange={selectChangeHandler} value={input.companyId}>
+                  <SelectTrigger className="w-full focus-visible:ring-offset-0 focus-visible:ring-0">
+                    <SelectValue placeholder="Select a Company" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {companies.map((company) => (
+                        <SelectItem key={company._id} value={company._id}>
+                          {company.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             )}
           </div>
           {loading ? (
-            <Button disabled className="w-full my-4 cursor-pointer">
+            <Button disabled className="w-full mt-6 cursor-pointer">
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
             </Button>
           ) : (
-            <Button type="submit" className="w-full my-4 cursor-pointer">
+            <Button type="submit" className="w-full mt-6 cursor-pointer">
               Update Job
             </Button>
           )}
