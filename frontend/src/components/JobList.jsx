@@ -4,9 +4,13 @@ import { Badge } from "./ui/badge";
 import { Bookmark } from "lucide-react";
 import { AvatarImage, Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { saveJobForLater } from "../redux/jobSlice";
+import { toast } from "sonner";
 
 const JobList = ({ job }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const daysAgoFunc = (mongodbTime) => {
     const createdAt = new Date(mongodbTime);
@@ -15,11 +19,21 @@ const JobList = ({ job }) => {
     return Math.floor(timeDifference / (1000 * 24 * 60 * 60));
   };
 
+  const saveForLater = () => {
+    try {
+      dispatch(saveJobForLater(job));
+      toast.success("Job saved for later!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to save job. Please try again.");
+    }
+  };
+
   return (
     <div className="p-3 sm:p-4 md:p-5 rounded-md shadow-md hover:shadow-xl transition-shadow bg-white border border-gray-100">
       <div className="flex items-center justify-between">
         <p className="text-xs sm:text-sm text-gray-500">{job?.createdAt ? `${daysAgoFunc(job?.createdAt)} days ago` : "Today"}</p>
-        <Button variant="outline" className="rounded-full h-8 w-8 p-0" size="icon">
+        <Button onClick={saveForLater} variant="outline" className="rounded-full h-8 w-8 p-0 cursor-pointer" size="icon">
           <Bookmark size={16} />
         </Button>
       </div>
@@ -54,10 +68,12 @@ const JobList = ({ job }) => {
       </div>
 
       <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mt-3 md:mt-4">
-        <Button onClick={() => navigate(`/description/${job?._id}`)} variant="outline" className="w-full sm:w-auto text-xs sm:text-sm py-1 h-8 sm:h-9">
+        <Button onClick={() => navigate(`/description/${job?._id}`)} variant="outline" className="w-full sm:w-auto text-xs sm:text-sm py-1 h-8 sm:h-9 cursor-pointer">
           See Details
         </Button>
-        <Button className="bg-purple-700 hover:bg-purple-800 w-full sm:w-auto text-xs sm:text-sm py-1 h-8 sm:h-9">Save for Later</Button>
+        <Button onClick={saveForLater} className="bg-purple-700 hover:bg-purple-800 w-full sm:w-auto text-xs sm:text-sm py-1 h-8 sm:h-9 cursor-pointer">
+          Save for Later
+        </Button>
       </div>
     </div>
   );

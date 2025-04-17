@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { User2, LogOut, Menu, X } from "lucide-react";
+import { User2, LogOut, Menu, X, Bookmark } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import axios from "axios";
@@ -73,21 +73,18 @@ const Navbar = () => {
   );
 
   return (
-    <div className="bg-white ">
+    <div className="bg-white">
       <div className="px-4 md:px-6 mx-auto max-w-7xl">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <div>
             <h1 className="text-xl md:text-2xl font-bold">
               Work<span className="text-[#F83002]">nest</span>
             </h1>
           </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6 lg:gap-12">
             <NavLinks />
 
-            {/* Auth buttons or user avatar */}
             {!user ? (
               <div className="flex gap-2 items-center">
                 <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
@@ -118,15 +115,23 @@ const Navbar = () => {
                   </div>
                   <div className="flex flex-col my-2 text-gray-600">
                     {user && user.role === "student" && (
-                      <div className="flex w-fit items-center gap-2 cursor-pointer">
-                        <User2 size={18} />
-                        <Button variant="link" className="p-0 h-auto" onClick={() => setMobileMenuOpen(false)}>
-                          <Link to="/profile">View Profile</Link>
-                        </Button>
-                      </div>
+                      <>
+                        <div className="flex w-fit items-center gap-2 cursor-pointer">
+                          <User2 size={18} />
+                          <Button variant="link" className="p-0 h-auto" onClick={() => setMobileMenuOpen(false)}>
+                            <Link to="/profile">View Profile</Link>
+                          </Button>
+                        </div>
+                        <div className="flex w-fit items-center gap-2 cursor-pointer mt-2">
+                          <Bookmark size={18} />
+                          <Button variant="link" className="p-0 h-auto" onClick={() => setMobileMenuOpen(false)}>
+                            <Link to="/save-for-later">Saved Jobs</Link>
+                          </Button>
+                        </div>
+                      </>
                     )}
 
-                    <div className="flex w-fit items-center gap-2 cursor-pointer">
+                    <div className="flex w-fit items-center gap-2 cursor-pointer mt-2">
                       <LogOut size={18} />
                       <Button onClick={logoutHandler} variant="link" className="p-0 h-auto">
                         Logout
@@ -138,7 +143,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <Button variant="ghost" size="icon" className="h-10 w-10 p-2" onClick={toggleMobileMenu}>
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -146,7 +150,6 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t">
             <div className="flex flex-col gap-4">
@@ -171,14 +174,22 @@ const Navbar = () => {
                   <div>
                     <h4 className="font-medium">{user?.fullname}</h4>
                     {user && user.role === "student" && (
-                      <div className="flex items-center gap-2 cursor-pointer text-sm">
-                        <User2 size={14} />
-                        <Link to="/profile" className="text-blue-600" onClick={() => setMobileMenuOpen(false)}>
-                          View Profile
-                        </Link>
-                      </div>
+                      <>
+                        <div className="flex items-center gap-2 cursor-pointer text-sm">
+                          <User2 size={14} />
+                          <Link to="/profile" className="text-blue-600" onClick={() => setMobileMenuOpen(false)}>
+                            View Profile
+                          </Link>
+                        </div>
+                        <div className="flex w-fit items-center gap-2 cursor-pointer mt-1">
+                          <Bookmark size={14} />
+                          <Link to="/save-for-later" className="text-blue-600" onClick={() => setMobileMenuOpen(false)}>
+                            Saved Jobs
+                          </Link>
+                        </div>
+                      </>
                     )}
-                    <div className="flex items-center gap-2 cursor-pointer text-sm">
+                    <div className="flex items-center gap-2 cursor-pointer text-sm mt-1">
                       <LogOut size={14} />
                       <button onClick={logoutHandler} className="text-blue-600">
                         Logout

@@ -65,7 +65,7 @@ const JobDescription = () => {
                 {singleJob?.jobType}
               </Badge>
               <Badge className="text-purple-700 font-bold text-xs md:text-sm" variant="ghost">
-                {singleJob?.salary} LPA
+                {singleJob?.salary}
               </Badge>
             </div>
           </div>
@@ -92,11 +92,13 @@ const JobDescription = () => {
           </div>
           <div className="flex flex-col sm:flex-row">
             <h2 className="font-bold min-w-24">Experience:</h2>
-            <span className="text-gray-800 sm:pl-4">{singleJob?.experienceLevel} years</span>
+            <span className="text-gray-800 sm:pl-4">
+              {singleJob?.experienceLevel} {singleJob?.experienceLevel > 1 ? "years" : "year"}
+            </span>
           </div>
           <div className="flex flex-col sm:flex-row">
             <h2 className="font-bold min-w-24">Salary:</h2>
-            <span className="text-gray-800 sm:pl-4">{singleJob?.salary} LPA</span>
+            <span className="text-gray-800 sm:pl-4">{singleJob?.salary}</span>
           </div>
           <div className="flex flex-col sm:flex-row">
             <h2 className="font-bold min-w-24">Total Applicants:</h2>
