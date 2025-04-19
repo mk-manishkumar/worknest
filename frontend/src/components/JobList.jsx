@@ -1,16 +1,20 @@
 import React from "react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Bookmark } from "lucide-react";
+import { Bookmark, BookmarkPlus } from "lucide-react";
 import { AvatarImage, Avatar } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { saveJobForLater } from "../redux/jobSlice";
 import { toast } from "sonner";
+import axios from "axios";
+import { USER_API_END_POINT } from "../utils/constant";
 
-const JobList = ({ job }) => {
+const JobList = ({ job, isSavedPage = false, onUnsave }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const savedJobs = useSelector((state) => state.job.savedJobs || []);
+  const isSaved = savedJobs.some((j) => j._id === job._id);
 
   const daysAgoFunc = (mongodbTime) => {
     const createdAt = new Date(mongodbTime);
@@ -19,13 +23,17 @@ const JobList = ({ job }) => {
     return Math.floor(timeDifference / (1000 * 24 * 60 * 60));
   };
 
-  const saveForLater = () => {
+  const saveForLater = async () => {
     try {
-      dispatch(saveJobForLater(job));
-      toast.success("Job saved for later!");
+      const res = await axios.post(`${USER_API_END_POINT}/save-job`, { jobId: job._id }, { withCredentials: true });
+
+      if (res.data.success) {
+        dispatch(saveJobForLater(job));
+        toast.success("Job saved for later!");
+      }
     } catch (error) {
       console.error(error);
-      toast.error("Failed to save job. Please try again.");
+      toast.error(error.response?.data?.message || "Failed to save job.");
     }
   };
 
@@ -33,9 +41,11 @@ const JobList = ({ job }) => {
     <div className="p-3 sm:p-4 md:p-5 rounded-md shadow-md hover:shadow-xl transition-shadow bg-white border border-gray-100">
       <div className="flex items-center justify-between">
         <p className="text-xs sm:text-sm text-gray-500">{job?.createdAt ? `${daysAgoFunc(job?.createdAt)} days ago` : "Today"}</p>
-        <Button onClick={saveForLater} variant="outline" className="rounded-full h-8 w-8 p-0 cursor-pointer" size="icon">
-          <Bookmark size={16} />
-        </Button>
+        {!isSavedPage && (
+          <Button onClick={saveForLater} variant="outline" className="rounded-full h-8 w-8 p-0 cursor-pointer" size="icon" disabled={isSaved}>
+            {isSaved ? <Bookmark className="text-gray-500" size={16} /> : <BookmarkPlus size={16} />}
+          </Button>
+        )}
       </div>
 
       <div className="flex items-center gap-2 my-2">
@@ -71,9 +81,24 @@ const JobList = ({ job }) => {
         <Button onClick={() => navigate(`/description/${job?._id}`)} variant="outline" className="w-full sm:w-auto text-xs sm:text-sm py-1 h-8 sm:h-9 cursor-pointer">
           See Details
         </Button>
-        <Button onClick={saveForLater} className="bg-purple-700 hover:bg-purple-800 w-full sm:w-auto text-xs sm:text-sm py-1 h-8 sm:h-9 cursor-pointer">
-          Save for Later
-        </Button>
+
+        {isSavedPage ? (
+          <Button onClick={onUnsave} className=" cursor-pointer bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto text-xs sm:text-sm py-1 h-8 sm:h-9">
+            <Bookmark className="mr-2" size={16} /> Unsave Job
+          </Button>
+        ) : (
+          <Button onClick={saveForLater} className={`w-full sm:w-auto text-xs sm:text-sm py-1 h-8 sm:h-9 ${isSaved ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-purple-700 hover:bg-purple-800 text-white"}`} disabled={isSaved}>
+            {isSaved ? (
+              <>
+                <Bookmark className="mr-2" size={16} /> Saved
+              </>
+            ) : (
+              <>
+                <BookmarkPlus className="mr-2" size={16} /> Save for Later
+              </>
+            )}
+          </Button>
+        )}
       </div>
     </div>
   );

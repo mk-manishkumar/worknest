@@ -33,11 +33,14 @@ const jobSlice = createSlice({
     },
     saveJobForLater: (state, action) => {
       const job = action.payload;
-      const alreadySaved = state.savedJobs.find((j) => j._id === job._id);
+      const savedJobs = state.savedJobs || []; // ✅ Ensure fallback before usage
+      const alreadySaved = savedJobs.find((j) => j._id === job._id);
+
       if (!alreadySaved) {
-        state.savedJobs = [...(state.savedJobs || []), action.payload];
+        state.savedJobs = [...savedJobs, job];
       }
     },
+
     removeSavedJob: (state, action) => {
       state.savedJobs = state.savedJobs.filter((j) => j._id !== action.payload);
     },
