@@ -15,13 +15,18 @@ import JobsAdmin from "./components/admin/JobsAdmin";
 import PostJob from "./components/admin/PostJob";
 import Applicants from "./components/admin/Applicants";
 import EditJob from "./components/admin/EditJob";
-import ProtectedRoute from "./components/admin/ProtectedRoutes";
+import AdminProtectedRoute from "./components/admin/ProtectedRoutes";
 import SaveForLater from "./components/SaveForLater";
+import ProtectedRouteForUser from "./components/ProtectedRouteForUser";
 
 const appRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <ProtectedRouteForUser>
+        <Home />
+      </ProtectedRouteForUser>
+    ),
   },
   {
     path: "/login",
@@ -33,80 +38,100 @@ const appRouter = createBrowserRouter([
   },
   {
     path: "/jobs",
-    element: <Jobs />,
+    element: (
+      <ProtectedRouteForUser>
+        <Jobs />
+      </ProtectedRouteForUser>
+    ),
   },
   {
     path: "/description/:id",
-    element: <JobDescription />,
+    element: (
+      <ProtectedRouteForUser>
+        <JobDescription />
+      </ProtectedRouteForUser>
+    ),
   },
   {
     path: "/browse",
-    element: <Browse />,
+    element: (
+      <ProtectedRouteForUser>
+        <Browse />
+      </ProtectedRouteForUser>
+    ),
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: (
+      <ProtectedRouteForUser>
+        <Profile />
+      </ProtectedRouteForUser>
+    ),
   },
   {
     path: "/save-for-later",
-    element: <SaveForLater />,
+    element: (
+      <ProtectedRouteForUser>
+        <SaveForLater />
+      </ProtectedRouteForUser>
+    ),
   },
 
   // ======== ADMIN ROUTES ======
   {
     path: "/admin/companies",
     element: (
-      <ProtectedRoute>
+      <AdminProtectedRoute>
         <Companies />
-      </ProtectedRoute>
+      </AdminProtectedRoute>
     ),
   },
   {
     path: "/admin/companies/create",
     element: (
-      <ProtectedRoute>
+      <AdminProtectedRoute>
         <CreateCompany />
-      </ProtectedRoute>
+      </AdminProtectedRoute>
     ),
   },
   {
     path: "/admin/companies/:id",
     element: (
-      <ProtectedRoute>
+      <AdminProtectedRoute>
         <CompanySetup />
-      </ProtectedRoute>
+      </AdminProtectedRoute>
     ),
   },
   {
     path: "/admin/jobs",
     element: (
-      <ProtectedRoute>
+      <AdminProtectedRoute>
         <JobsAdmin />
-      </ProtectedRoute>
+      </AdminProtectedRoute>
     ),
   },
   {
     path: "/admin/jobs/create",
     element: (
-      <ProtectedRoute>
+      <AdminProtectedRoute>
         <PostJob />
-      </ProtectedRoute>
+      </AdminProtectedRoute>
     ),
   },
   {
     path: "/admin/jobs/:id/applicants",
     element: (
-      <ProtectedRoute>
+      <AdminProtectedRoute>
         <Applicants />
-      </ProtectedRoute>
+      </AdminProtectedRoute>
     ),
   },
   {
     path: "/admin/jobs/:id/edit",
     element: (
-      <ProtectedRoute>
+      <AdminProtectedRoute>
         <EditJob />
-      </ProtectedRoute>
+      </AdminProtectedRoute>
     ),
   },
 ]);
