@@ -25,7 +25,7 @@ const Browse = () => {
     return () => {
       dispatch(setSearchedQuery(""));
     };
-  }, []);
+  }, [dispatch]);
 
   const jobsToDisplay = searchedQuery ? filteredJobs : allJobs;
 

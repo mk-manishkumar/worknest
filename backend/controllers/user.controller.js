@@ -79,11 +79,12 @@ export const login = async (req, res) => {
       .status(200)
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: "strict",
-        secure: true,
-        maxAge: 604800000,
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        secure: process.env.NODE_ENV === "production", // only true in production
+        maxAge: 7 * 24 * 60 * 60 * 1000, 
       })
       .json({ message: `Welcome back ${user.fullname}`, user, success: true });
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal server error", success: false });

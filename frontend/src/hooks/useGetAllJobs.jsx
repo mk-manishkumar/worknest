@@ -1,12 +1,12 @@
 import axios from "axios";
-import React, { useEffect } from "react";
-import { JOB_API_END_POINT } from "../utils/constant";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAllJobs } from "@/redux/jobSlice";
+import { JOB_API_END_POINT } from "../utils/constant";
 
 const useGetAllJobs = () => {
   const dispatch = useDispatch();
-  const { searchedQuery } = useSelector((store) => store.job);
+  const { searchedQuery, allJobs } = useSelector((store) => store.job);
 
   useEffect(() => {
     const fetchAllJobs = async () => {
@@ -16,11 +16,14 @@ const useGetAllJobs = () => {
           dispatch(setAllJobs(res.data.jobs));
         }
       } catch (error) {
-        console.log(error);
+        console.error(error.response?.data || error.message);
       }
     };
-    fetchAllJobs();
-  }, []);
+
+    if (allJobs.length === 0 || searchedQuery) {
+      fetchAllJobs();
+    }
+  }, [dispatch, searchedQuery]);
 };
 
 export default useGetAllJobs;
