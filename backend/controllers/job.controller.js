@@ -1,5 +1,6 @@
 import { Job } from "../models/job.model.js";
-import { Application } from './../models/application.model.js';
+import { devLog } from "../utils/consoleLogHelper.js";
+import { Application } from "./../models/application.model.js";
 
 // ==================== POST JOB ====================
 export const postJob = async (req, res) => {
@@ -33,7 +34,7 @@ export const postJob = async (req, res) => {
       job,
     });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({
       message: "Internal server error",
       success: false,
@@ -67,7 +68,7 @@ export const getAllJobs = async (req, res) => {
       jobs,
     });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({
       message: "Internal server error",
       success: false,
@@ -94,7 +95,7 @@ export const getJobById = async (req, res) => {
       job,
     });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({
       message: "Internal server error",
       success: false,
@@ -123,7 +124,7 @@ export const getJobsByAdmin = async (req, res) => {
       jobs,
     });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({
       message: "Internal server error",
       success: false,
@@ -170,7 +171,7 @@ export const updateJob = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({
       message: "Internal server error",
       success: false,
@@ -199,7 +200,7 @@ export const deleteJob = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({
       message: "Internal server error",
       success: false,

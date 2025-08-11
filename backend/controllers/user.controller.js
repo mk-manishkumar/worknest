@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getDataUri from "./../utils/dataURI.js";
 import cloudinary from "./../utils/cloudinary.js";
+import { devLog } from "../utils/consoleLogHelper.js";
 
 // ============================== REGISTER CONTROLLER ==========================
 export const register = async (req, res) => {
@@ -14,13 +15,16 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: "All fields are required", success: false });
     }
 
-    const file = req.file;
-    const fileURI = getDataUri(file);
-    const cloudResponse = await cloudinary.uploader.upload(fileURI.content);
-
-    const user = await User.findOne({ email });
-    if (user) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return res.status(400).json({ message: "User already exists with this email", success: false });
+    }
+
+    let profilePhotoUrl = null;
+    if (req.file) {
+      const fileURI = getDataUri(req.file);
+      const cloudResponse = await cloudinary.uploader.upload(fileURI.content);
+      profilePhotoUrl = cloudResponse.secure_url;
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -31,12 +35,12 @@ export const register = async (req, res) => {
       phoneNumber,
       password: hashedPassword,
       role,
-      profile: { profilePhoto: cloudResponse.secure_url },
+      profile: { profilePhoto: profilePhotoUrl },
     });
 
     return res.status(201).json({ message: "User registered successfully", success: true });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({ message: "Internal server error", success: false });
   }
 };
@@ -64,7 +68,9 @@ export const login = async (req, res) => {
     }
 
     const tokenData = { userId: user._id };
-    const token = jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: "7 days" });
+    const token = jwt.sign(tokenData, process.env.SECRET_KEY, {
+      expiresIn: "7 days",
+    });
 
     user = {
       _id: user._id,
@@ -80,13 +86,12 @@ export const login = async (req, res) => {
       .cookie("token", token, {
         httpOnly: true,
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        secure: process.env.NODE_ENV === "production", // only true in production
-        maxAge: 7 * 24 * 60 * 60 * 1000, 
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .json({ message: `Welcome back ${user.fullname}`, user, success: true });
-
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({ message: "Internal server error", success: false });
   }
 };
@@ -96,7 +101,7 @@ export const logout = async (req, res) => {
   try {
     return res.status(200).cookie("token", "", { maxAge: 0 }).json({ message: "Logged out successfully", success: true });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({ message: "Internal server error", success: false });
   }
 };
@@ -106,8 +111,14 @@ export const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
     const file = req.file;
-    const fileURI = getDataUri(file);
-    const cloudResponse = await cloudinary.uploader.upload(fileURI.content, { resource_type: "raw" });
+
+    let cloudResponse = null;
+    if (file) {
+      const fileURI = getDataUri(file);
+      cloudResponse = await cloudinary.uploader.upload(fileURI.content, {
+        resource_type: "raw",
+      });
+    }
 
     let skillsArray = skills ? skills.split(",") : [];
     const userId = req.id;
@@ -136,7 +147,7 @@ export const updateProfile = async (req, res) => {
 
     return res.status(200).json({ message: "Profile updated successfully", user, success: true });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({ message: "Internal server error", success: false });
   }
 };
@@ -162,7 +173,7 @@ export const saveJob = async (req, res) => {
 
     return res.status(200).json({ message: "Job saved for later", success: true });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({ message: "Internal server error", success: false });
   }
 };
@@ -179,7 +190,7 @@ export const unsaveJob = async (req, res) => {
 
     return res.status(200).json({ message: "Job removed from saved list", success: true });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({ message: "Internal server error", success: false });
   }
 };
@@ -187,13 +198,16 @@ export const unsaveJob = async (req, res) => {
 // ============================== GET SAVED JOBS ==========================
 export const getSavedJobs = async (req, res) => {
   try {
-    const user = await User.findById(req.id).populate({ path: "savedJobs", populate: { path: "company" } });
+    const user = await User.findById(req.id).populate({
+      path: "savedJobs",
+      populate: { path: "company" },
+    });
 
     if (!user) return res.status(404).json({ message: "User not found", success: false });
 
     return res.status(200).json({ success: true, savedJobs: user.savedJobs });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({ message: "Internal server error", success: false });
   }
 };

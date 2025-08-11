@@ -16,17 +16,9 @@ import Applicants from "./components/admin/Applicants";
 import EditJob from "./components/admin/EditJob";
 import AdminProtectedRoute from "./components/admin/ProtectedRoutes";
 import SaveForLater from "./components/SaveForLater";
-import ProtectedRouteForUser from "./components/ProtectedRouteForUser";
+import { PublicOrStudentRoute, StudentOnlyRoute } from "./components/ProtectedRouteForUser";
 
 const appRouter = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <ProtectedRouteForUser>
-        <Home />
-      </ProtectedRouteForUser>
-    ),
-  },
   {
     path: "/login",
     element: <Login />,
@@ -35,44 +27,55 @@ const appRouter = createBrowserRouter([
     path: "/signup",
     element: <Signup />,
   },
+  // Public + Student allowed (Recruiter blocked)
   {
-    path: "/jobs",
+    path: "/",
     element: (
-      <ProtectedRouteForUser>
-        <Jobs />
-      </ProtectedRouteForUser>
-    ),
-  },
-  {
-    path: "/description/:id",
-    element: (
-      <ProtectedRouteForUser>
-        <JobDescription />
-      </ProtectedRouteForUser>
+      <PublicOrStudentRoute>
+        <Home />
+      </PublicOrStudentRoute>
     ),
   },
   {
     path: "/browse",
     element: (
-      <ProtectedRouteForUser>
+      <PublicOrStudentRoute>
         <Browse />
-      </ProtectedRouteForUser>
+      </PublicOrStudentRoute>
     ),
   },
   {
+    path: "/jobs",
+    element: (
+      <PublicOrStudentRoute>
+        <Jobs />
+      </PublicOrStudentRoute>
+    ),
+  },
+  {
+    path: "/description/:id",
+    element: (
+      <PublicOrStudentRoute>
+        <JobDescription />
+      </PublicOrStudentRoute>
+    ),
+  },
+
+  // Student only (Guest & Recruiter blocked)
+  {
     path: "/profile",
     element: (
-      <ProtectedRouteForUser>
+      <StudentOnlyRoute>
         <Profile />
-      </ProtectedRouteForUser>
+      </StudentOnlyRoute>
     ),
   },
   {
     path: "/save-for-later",
     element: (
-      <ProtectedRouteForUser>
+      <StudentOnlyRoute>
         <SaveForLater />
-      </ProtectedRouteForUser>
+      </StudentOnlyRoute>
     ),
   },
 
@@ -136,11 +139,7 @@ const appRouter = createBrowserRouter([
 ]);
 
 const App = () => {
-  return (
-    <>
-      <RouterProvider router={appRouter} />
-    </>
-  );
+  return <RouterProvider router={appRouter} />;
 };
 
 export default App;
