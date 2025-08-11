@@ -82,14 +82,15 @@ const CompaniesTable = () => {
                         <MoreHorizontal className="cursor-pointer w-5 h-5 ml-auto" />
                       </PopoverTrigger>
                       <PopoverContent className="w-32 p-2">
-                        <div className="flex items-center gap-2 w-full cursor-pointer p-2 hover:bg-gray-100 rounded-md text-xs sm:text-sm" onClick={() => navigate(`/admin/companies/${company._id}`)}>
+                        <button type="button" className="flex items-center gap-2 w-full p-2 hover:bg-gray-100 rounded-md text-xs sm:text-sm" onClick={() => navigate(`/admin/companies/${company._id}`)}>
                           <Edit2 className="w-3 h-3 sm:w-4 sm:h-4" />
                           <span>Edit</span>
-                        </div>
-                        <div onClick={() => handleDeleteClick(company._id)} className="flex items-center w-full gap-2 cursor-pointer p-2 hover:bg-gray-100 rounded-md mt-1 text-red-600 text-xs sm:text-sm">
+                        </button>
+
+                        <button type="button" className="flex items-center w-full gap-2 p-2 hover:bg-gray-100 rounded-md mt-1 text-red-600 text-xs sm:text-sm" onClick={() => handleDeleteClick(company._id)}>
                           <Delete className="w-3 h-3 sm:w-4 sm:h-4" />
                           <span>Delete</span>
-                        </div>
+                        </button>
                       </PopoverContent>
                     </Popover>
                   </TableCell>
