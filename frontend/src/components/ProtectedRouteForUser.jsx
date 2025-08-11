@@ -1,18 +1,46 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
-const ProtectedRouteForUser = ({ children }) => {
-  const { user } = useSelector((store) => store.auth);
+/**
+ * PublicOrStudentRoute
+ * - Allows guests (not logged in) and students
+ * - Blocks recruiters
+ */
+export const PublicOrStudentRoute = ({ children }) => {
+  const { user, loading } = useSelector((store) => store.auth);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user === null || user.role !== "student") {
+    if (!loading && user?.role === "recruiter") {
       navigate("/admin/companies");
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
+  if (loading) return null;
+  if (user?.role === "recruiter") return null;
   return <>{children}</>;
 };
 
-export default ProtectedRouteForUser;
+/**
+ * StudentOnlyRoute
+ * - Allows only logged-in students
+ * - Blocks guests and recruiters
+ */
+export const StudentOnlyRoute = ({ children }) => {
+  const { user, loading } = useSelector((store) => store.auth);
+
+  if (loading) {
+    return null;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user.role !== "student") {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};

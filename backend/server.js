@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config({});
 
 // ==================== DATABASE CONNECTION ====================
-import connectDB from "./utils/db.js";
+import connectDB from "./config/db.js";
 connectDB();
 
 // ==================== IMPORT ROUTES ====================
@@ -29,6 +29,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // ==================== APIs ====================
+app.get("/", (req, res) => res.send("Welcome to the Worknest API"));
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/company", companyRoutes);
 app.use("/api/v1/job", jobRoutes);

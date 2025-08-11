@@ -1,5 +1,6 @@
 import { Application } from "../models/application.model.js";
 import { Job } from "../models/job.model.js";
+import { devLog } from "../utils/consoleLogHelper.js";
 
 // ==================== APPLY JOB ====================
 export const applyJob = async (req, res) => {
@@ -8,54 +9,32 @@ export const applyJob = async (req, res) => {
     const jobId = req.params.id;
 
     if (!jobId) {
-      return res.status(400).json({
-        message: "Job ID is required",
-        success: false,
-      });
+      return res.status(400).json({ message: "Job ID is required", success: false });
     }
 
-    // check if the user has already applied for this job
-    const existingApplication = await Application.findOne({
-      job: jobId,
-      applicant: userId,
-    });
-
+    // Check if already applied
+    const existingApplication = await Application.findOne({ job: jobId, applicant: userId });
     if (existingApplication) {
-      return res.status(400).json({
-        message: "You have already applied for this job",
-        success: false,
-      });
+      return res.status(400).json({ message: "You have already applied for this job", success: false });
     }
 
-    // check if the job exists
+    // Check if job exists
     const job = await Job.findById(jobId);
     if (!job) {
-      return res.status(404).json({
-        message: "Job not found",
-        success: false,
-      });
+      return res.status(404).json({ message: "Job not found", success: false });
     }
 
-    // create a new application
-    const newApplication = await Application.create({
-      job: jobId,
-      applicant: userId,
-    });
+    // Create new application
+    const newApplication = await Application.create({ job: jobId, applicant: userId });
 
-    // add the application to the job
+    // Link application to job
     job.applications.push(newApplication._id);
     await job.save();
 
-    return res.status(201).json({
-      message: "Job applied successfully",
-      success: true,
-    });
+    return res.status(201).json({ message: "Job applied successfully", success: true });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "Internal server error",
-      success: false,
-    });
+    devLog(error);
+    return res.status(500).json({ message: "Internal server error", success: false });
   }
 };
 
@@ -64,7 +43,6 @@ export const getAppliedJobs = async (req, res) => {
   try {
     const userId = req.id;
 
-    // get all applications of the user
     const applications = await Application.find({ applicant: userId })
       .sort({ createdAt: -1 })
       .populate({
@@ -72,102 +50,68 @@ export const getAppliedJobs = async (req, res) => {
         options: { sort: { createdAt: -1 } },
         populate: {
           path: "company",
-          opttions: { sort: { createdAt: -1 } },
+          options: { sort: { createdAt: -1 } },
         },
       });
 
-    // check if the user has applied for any job
-    if (!applications) {
-      return res.status(404).json({
-        message: "No applications found",
-        success: false,
-      });
+    if (!applications || applications.length === 0) {
+      return res.status(404).json({ message: "No applications found", success: false });
     }
 
-    return res.status(200).json({
-      applications,
-      success: true,
-    });
+    return res.status(200).json({ applications, success: true });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "Internal server error",
-      success: false,
-    });
+    devLog(error);
+    return res.status(500).json({ message: "Internal server error", success: false });
   }
 };
 
-// ==================== GET APPLICANTS (for admin to check the count)====================
+// ==================== GET APPLICANTS ====================
 export const getApplicants = async (req, res) => {
   try {
     const jobId = req.params.id;
 
+    if (!jobId) {
+      return res.status(400).json({ message: "Job ID is required", success: false });
+    }
+
     const job = await Job.findById(jobId).populate({
       path: "applications",
       options: { sort: { createdAt: -1 } },
-      populate: {
-        path: "applicant",
-      },
+      populate: { path: "applicant" },
     });
 
-    // check if the job exists
     if (!job) {
-      return res.status(404).json({
-        message: "Job not found",
-        success: false,
-      });
+      return res.status(404).json({ message: "Job not found", success: false });
     }
 
-    return res.status(200).json({
-      job,
-      success: true,
-    });
+    return res.status(200).json({ job, success: true });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "Internal server error",
-      success: false,
-    });
+    devLog(error);
+    return res.status(500).json({ message: "Internal server error", success: false });
   }
 };
 
-// ==================== ACCEPT/REJECT APPLICANT ====================
+// ==================== UPDATE APPLICATION STATUS ====================
 export const applicationStatus = async (req, res) => {
   try {
     const { status } = req.body;
     const applicationId = req.params.id;
-    console.log(applicationId);
-    
 
     if (!status) {
-      return res.status(400).json({
-        message: "Status is required",
-        success: false,
-      });
+      return res.status(400).json({ message: "Status is required", success: false });
     }
 
-    // find the application by application ID
-    const application = await Application.findOne({ _id: applicationId });
+    const application = await Application.findById(applicationId);
     if (!application) {
-      return res.status(404).json({
-        message: "Application not found",
-        success: false,
-      });
+      return res.status(404).json({ message: "Application not found", success: false });
     }
 
-    // update the status of the application
     application.status = status.toLowerCase();
     await application.save();
 
-    return res.status(200).json({
-      message: "Status updated successfully",
-      success: true,
-    });
+    return res.status(200).json({ message: "Status updated successfully", success: true });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "Internal server error",
-      success: false,
-    });
+    devLog(error);
+    return res.status(500).json({ message: "Internal server error", success: false });
   }
 };

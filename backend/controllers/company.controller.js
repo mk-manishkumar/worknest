@@ -1,13 +1,15 @@
-import { Company } from "./../models/company.model.js";
-import getDataUri from "./../utils/dataURI.js";
-import cloudinary from "./../utils/cloudinary.js";
+import { Company } from "../models/company.model.js";
+import getDataUri from "../utils/dataURI.js";
+import cloudinary from "../utils/cloudinary.js";
 import { Job } from "../models/job.model.js";
-import { Application } from './../models/application.model.js';
+import { Application } from "../models/application.model.js";
+import { devLog } from "../utils/consoleLogHelper.js";
 
 // ==================== REGISTER COMPANY ====================
 export const registerCompany = async (req, res) => {
   try {
     const { companyName } = req.body;
+
     if (!companyName) {
       return res.status(400).json({
         message: "Company name is required",
@@ -30,11 +32,11 @@ export const registerCompany = async (req, res) => {
 
     return res.status(201).json({
       message: "Company created successfully",
-      company,
       success: true,
+      company,
     });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({
       message: "Internal server error",
       success: false,
@@ -42,23 +44,24 @@ export const registerCompany = async (req, res) => {
   }
 };
 
-// ==================== GET ALL COMPANIES ====================
+// ==================== GET ALL COMPANIES FOR USER ====================
 export const getAllCompanies = async (req, res) => {
   try {
-    const userId = req.id;
-    const companies = await Company.find({ userId });
-    if (!companies) {
-      return res.status(400).json({
+    const companies = await Company.find({ userId: req.id });
+
+    if (!companies || companies.length === 0) {
+      return res.status(404).json({
         message: "No companies found",
         success: false,
       });
     }
+
     return res.status(200).json({
-      companies,
       success: true,
+      companies,
     });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({
       message: "Internal server error",
       success: false,
@@ -70,18 +73,20 @@ export const getAllCompanies = async (req, res) => {
 export const getCompanyById = async (req, res) => {
   try {
     const company = await Company.findById(req.params.id);
+
     if (!company) {
-      return res.status(400).json({
+      return res.status(404).json({
         message: "Company not found",
         success: false,
       });
     }
+
     return res.status(200).json({
-      company,
       success: true,
+      company,
     });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({
       message: "Internal server error",
       success: false,
@@ -94,13 +99,12 @@ export const updateCompany = async (req, res) => {
   try {
     const companyId = req.params.id;
     const { name, description, website, location } = req.body;
-    const file = req.file;
 
     const updatedData = { name, description, website, location };
 
-    // Handle file upload only if a file is provided
-    if (file) {
-      const fileURI = getDataUri(file);
+    // Only upload a logo if a file is provided
+    if (req.file) {
+      const fileURI = getDataUri(req.file);
       const cloudResponse = await cloudinary.uploader.upload(fileURI.content);
       updatedData.logo = cloudResponse.secure_url;
     }
@@ -116,11 +120,11 @@ export const updateCompany = async (req, res) => {
 
     return res.status(200).json({
       message: "Company updated successfully",
-      company,
       success: true,
+      company,
     });
   } catch (error) {
-    console.log(error);
+    devLog(error);
     return res.status(500).json({
       message: "Internal server error",
       success: false,
@@ -129,14 +133,11 @@ export const updateCompany = async (req, res) => {
 };
 
 // ==================== DELETE COMPANY ====================
-
 export const deleteCompany = async (req, res) => {
   try {
     const companyId = req.params.id;
 
-    // Delete the company
     const company = await Company.findByIdAndDelete(companyId);
-
     if (!company) {
       return res.status(404).json({
         message: "Company not found",
@@ -144,14 +145,12 @@ export const deleteCompany = async (req, res) => {
       });
     }
 
-    // Find all jobs of the company
+    // Find jobs belonging to this company
     const jobs = await Job.find({ company: companyId });
     const jobIds = jobs.map((job) => job._id);
 
-    // Delete all applications for these jobs
+    // Remove related applications and jobs
     await Application.deleteMany({ job: { $in: jobIds } });
-
-    // Delete all jobs of the company
     await Job.deleteMany({ company: companyId });
 
     return res.status(200).json({
@@ -159,7 +158,7 @@ export const deleteCompany = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log("Error deleting company:", error);
+    devLog(error);
     return res.status(500).json({
       message: "Internal server error",
       success: false,
