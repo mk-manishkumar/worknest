@@ -47,9 +47,9 @@ const FilterJob = ({ setShowFilter }) => {
               Clear
             </Button>
           )}
-          <button onClick={() => setShowFilter && setShowFilter(false)} className="lg:hidden">
+          <Button onClick={() => setShowFilter && setShowFilter(false)} className="lg:hidden">
             <X size={20} />
-          </button>
+          </Button>
         </div>
       </div>
       <hr className="mt-3" />

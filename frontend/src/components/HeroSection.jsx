@@ -34,7 +34,7 @@ const HeroSection = () => {
 
         <div className="flex w-full sm:w-4/5 md:w-3/5 lg:w-2/5 shadow-lg border border-gray-200 rounded-full items-center pl-3 gap-2 mx-auto mt-2 sm:mt-4">
           <input type="text" placeholder="Find your dream jobs" className="outline-none border-none w-full py-2 text-sm sm:text-base" onChange={(e) => setQuery(e.target.value)} onKeyDown={handleKeyDown} />
-          <Button onClick={searchJobHandler} className="rounded-r-full bg-[#6A38C2] h-10 px-3 sm:px-4">
+          <Button onClick={searchJobHandler} className="rounded-r-full bg-[#6A38C2] h-10 px-3 sm:px-4 cursor-pointer">
             <Search className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </div>

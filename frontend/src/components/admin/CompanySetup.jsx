@@ -118,7 +118,7 @@ const CompanySetup = () => {
             </div>
           </div>
 
-          <Button type="submit" className="w-full mt-6 md:mt-8" disabled={loading}>
+          <Button type="submit" className="w-full mt-6 md:mt-8 cursor-pointer" disabled={loading}>
             {loading ? "Please wait.." : "Update"}
           </Button>
         </form>

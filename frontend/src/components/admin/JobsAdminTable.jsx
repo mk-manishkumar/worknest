@@ -54,7 +54,7 @@ const JobsAdminTable = () => {
             <TableHead className="text-right whitespace-nowrap">Action</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="cursor-pointer">
           {filterJobs && filterJobs.length > 0 ? (
             filterJobs.map((job) => (
               <TableRow key={job._id}>
@@ -72,18 +72,18 @@ const JobsAdminTable = () => {
                       <MoreHorizontal className="h-5 w-5" />
                     </PopoverTrigger>
                     <PopoverContent className="w-32 p-2">
-                      <div onClick={() => navigate(`/admin/jobs/${job._id}/edit`)} className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded cursor-pointer">
+                      <button onClick={() => navigate(`/admin/jobs/${job._id}/edit`)} className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded cursor-pointer w-full text-left">
                         <Edit2 className="w-4" />
                         <span>Edit</span>
-                      </div>
-                      <div onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)} className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded cursor-pointer mt-1">
+                      </button>
+                      <button onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)} className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded cursor-pointer mt-1 w-full text-left">
                         <Eye className="w-4" />
                         <span>Applicants</span>
-                      </div>
-                      <div onClick={() => handleDeleteClick(job._id)} className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded cursor-pointer mt-1 text-red-600">
+                      </button>
+                      <button onClick={() => handleDeleteClick(job._id)} className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 rounded cursor-pointer mt-1 text-red-600 w-full text-left">
                         <Delete className="w-4" />
                         <span>Delete</span>
-                      </div>
+                      </button>
                     </PopoverContent>
                   </Popover>
                 </TableCell>

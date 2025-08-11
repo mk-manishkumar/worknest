@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { devLog } from "./../utils/consoleLogHelper";
+import { devLog } from "../utils/consoleLogHelper.js";
 
 const connectDB = async () => {
   try {
