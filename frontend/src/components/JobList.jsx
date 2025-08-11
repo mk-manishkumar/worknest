@@ -87,7 +87,7 @@ const JobList = ({ job, isSavedPage = false, onUnsave }) => {
             <Bookmark className="mr-2" size={16} /> Unsave Job
           </Button>
         ) : (
-          <Button onClick={saveForLater} className={`w-full sm:w-auto text-xs sm:text-sm py-1 h-8 sm:h-9 ${isSaved ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-purple-700 hover:bg-purple-800 text-white"}`} disabled={isSaved}>
+          <Button onClick={saveForLater} className={`w-full sm:w-auto text-xs sm:text-sm py-1 h-8 sm:h-9 ${isSaved ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-purple-700 hover:bg-purple-800 text-white cursor-pointer"}`} disabled={isSaved}>
             {isSaved ? (
               <>
                 <Bookmark className="mr-2" size={16} /> Saved

@@ -136,7 +136,7 @@ const PostJob = () => {
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
             </Button>
           ) : (
-            <Button type="submit" className="w-full mt-6">
+            <Button type="submit" className="w-full mt-6 cursor-pointer">
               Post New Job
             </Button>
           )}

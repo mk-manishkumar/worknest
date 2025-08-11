@@ -88,12 +88,12 @@ const Navbar = () => {
             {!user ? (
               <div className="flex gap-2 items-center">
                 <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="primary" className="text-sm">
+                  <Button variant="primary" className="text-sm cursor-pointer">
                     Login
                   </Button>
                 </Link>
                 <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="bg-[#6A38C2] hover:bg-[#5b30a6] text-sm">Signup</Button>
+                  <Button className="bg-[#6A38C2] hover:bg-[#5b30a6] text-sm cursor-pointer">Signup</Button>
                 </Link>
               </div>
             ) : (
@@ -191,9 +191,9 @@ const Navbar = () => {
                     )}
                     <div className="flex items-center gap-2 cursor-pointer text-sm mt-1">
                       <LogOut size={14} />
-                      <button onClick={logoutHandler} className="text-blue-600">
+                      <Button onClick={logoutHandler} className="text-blue-600">
                         Logout
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
