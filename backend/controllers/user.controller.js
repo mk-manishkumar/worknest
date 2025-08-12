@@ -110,47 +110,44 @@ export const logout = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
-    const file = req.file;
 
-    let cloudResponse = null;
-    if (file) {
-      const fileURI = getDataUri(file);
-      cloudResponse = await cloudinary.uploader.upload(fileURI.content, {
-        resource_type: "raw",
-      });
+    const updatedData = {};
+    if (fullname) updatedData.fullname = fullname;
+    if (email) updatedData.email = email;
+    if (phoneNumber) updatedData.phoneNumber = phoneNumber;
+    if (bio) updatedData['profile.bio'] = bio;
+    if (skills) updatedData['profile.skills'] = skills.split(',').map((s) => s.trim()).filter(Boolean);
+
+    // Handle profile photo upload (field name: profilePhoto)
+    if (req.files?.profilePhoto?.[0]) {
+      const fileUri = getDataUri(req.files.profilePhoto[0]);
+      const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+      updatedData['profile.profilePhoto'] = cloudResponse.secure_url;
     }
 
-    let skillsArray = skills ? skills.split(",") : [];
-    const userId = req.id;
-    let user = await User.findById(userId);
-
-    if (fullname) user.fullname = fullname;
-    if (email) user.email = email;
-    if (phoneNumber) user.phoneNumber = phoneNumber;
-    if (bio) user.profile.bio = bio;
-    if (skills) user.profile.skills = skillsArray;
-    if (cloudResponse) {
-      user.profile.resume = cloudResponse.secure_url;
-      user.profile.resumeOriginalName = file.originalname;
+    // Handle resume upload (field name: resume)
+    if (req.files?.resume?.[0]) {
+      const resumeFile = req.files.resume[0];
+      const resumeUri = getDataUri(resumeFile);
+      const cloudResponse = await cloudinary.uploader.upload(resumeUri.content, { resource_type: 'raw' });
+      updatedData['profile.resume'] = cloudResponse.secure_url;
+      updatedData['profile.resumeOriginalName'] = resumeFile.originalname;
     }
 
-    await user.save();
+    const user = await User.findByIdAndUpdate(req.id, { $set: updatedData }, { new: true }).lean();
 
-    user = {
-      _id: user._id,
-      fullname: user.fullname,
-      email: user.email,
-      phoneNumber: user.phoneNumber,
-      role: user.role,
-      profile: user.profile,
-    };
+    if (!user) {
+      return res.status(404).json({ message: 'User not found', success: false });
+    }
 
-    return res.status(200).json({ message: "Profile updated successfully", user, success: true });
+    return res.status(200).json({ message: 'Profile updated successfully', success: true, user });
   } catch (error) {
     devLog(error);
-    return res.status(500).json({ message: "Internal server error", success: false });
+    return res.status(500).json({ message: 'Internal server error', success: false });
   }
 };
+
+
 
 // ============================== SAVE JOB ==========================
 export const saveJob = async (req, res) => {
